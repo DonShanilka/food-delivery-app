@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { MenuItem } from "@/types";
@@ -8,15 +8,22 @@ interface Props {
   onAdd: () => void;
 }
 
+const PLACEHOLDER = "https://via.placeholder.com/160x160.png?text=Menu";
+
 export default function MenuItemRow({ item, onAdd }: Props) {
-  const imageUri =
-    item.image && item.image.length > 0
-      ? item.image
-      : "https://via.placeholder.com/160x160.png?text=Menu";
+  const [failed, setFailed] = useState(false);
+  const imageUri = typeof item.image === "string" && item.image.length > 0
+    ? item.image
+    : PLACEHOLDER;
 
   return (
     <View className="flex-row bg-white rounded-2xl p-3 mb-3 items-center shadow-sm" style={{ elevation: 1 }}>
-      <Image source={{ uri: imageUri }} className="w-20 h-20 rounded-xl" />
+      <Image
+        source={{ uri: failed ? PLACEHOLDER : imageUri }}
+        onError={() => setFailed(true)}
+        resizeMode="cover"
+        className="w-20 h-20 rounded-xl"
+      />
       <View className="flex-1 ml-3">
         <View className="flex-row items-center justify-between">
           <Text className="text-dark font-semibold text-base">{item.name}</Text>

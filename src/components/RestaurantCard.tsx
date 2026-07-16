@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Restaurant } from "@/types";
@@ -8,10 +8,17 @@ interface Props {
   onPress: () => void;
 }
 
+const PLACEHOLDER = "https://via.placeholder.com/640x400.png?text=Restaurant";
+
 export default function RestaurantCard({ restaurant, onPress }: Props) {
+  const [failed, setFailed] = useState(false);
   const cuisineLabel = Array.isArray(restaurant.cuisine)
     ? restaurant.cuisine.join(", ")
     : restaurant.cuisine || "Restaurant";
+
+  const uri = typeof restaurant.image === "string" && restaurant.image.length > 0
+    ? restaurant.image
+    : PLACEHOLDER;
 
   return (
     <TouchableOpacity
@@ -20,12 +27,9 @@ export default function RestaurantCard({ restaurant, onPress }: Props) {
       style={{ elevation: 2 }}
     >
       <Image
-        source={{
-          uri:
-            restaurant.image && restaurant.image.length > 0
-              ? restaurant.image
-              : "https://via.placeholder.com/640x400.png?text=Restaurant",
-        }}
+        source={{ uri: failed ? PLACEHOLDER : uri }}
+        onError={() => setFailed(true)}
+        resizeMode="cover"
         className="w-full h-40"
       />
       <View className="p-3">

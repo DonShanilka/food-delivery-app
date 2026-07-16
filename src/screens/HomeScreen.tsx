@@ -9,16 +9,20 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { CompositeNavigationProp } from "@react-navigation/native";
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import RestaurantCard from "@/components/RestaurantCard";
-import { apiGet } from "@/services/api";
-import { Restaurant } from "@/types";
-import { RootStackParamList } from "@/types";
+import { apiGet, normalizeImageValue } from "@/services/api";
+import { Restaurant, MainTabParamList, RootStackParamList } from "@/types";
 
-type Nav = NativeStackNavigationProp<RootStackParamList>;
+type HomeScreenNavigationProp = CompositeNavigationProp<
+  BottomTabNavigationProp<MainTabParamList, "Home">,
+  NativeStackNavigationProp<RootStackParamList>
+>;
 
 export default function HomeScreen() {
-  const navigation = useNavigation<Nav>();
+  const navigation = useNavigation<HomeScreenNavigationProp>();
   const [query, setQuery] = useState("");
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [loading, setLoading] = useState(true);
@@ -28,23 +32,23 @@ export default function HomeScreen() {
     const loadRestaurants = async () => {
       try {
         setLoading(true);
-        const response = await apiGet<{ success: boolean; count: number; data: any[] }>(
+                const response = await apiGet<{ success: boolean; count: number; data: any[] }>(
           "/resturent/getAll"
         );
 
         const mapped = response.data.map((item) => ({
           id: item._id,
-          name: item.name,
+          name: item.name || "Restaurant",
           cuisine: Array.isArray(item.cuisine)
             ? item.cuisine.join(", ")
             : item.cuisine || item.category || "Restaurant",
           image:
-            item.image && typeof item.image === "string"
-              ? item.image
-              : "https://via.placeholder.com/640x400.png?text=Restaurant",
-          rating: item.rating ?? 4.5,
+            normalizeImageValue(item.image) ||
+            "https://via.placeholder.com/640x400.png?text=Restaurant",
+          rating: typeof item.rating === "number" ? item.rating : 4.5,
           deliveryTime: item.deliveryTime ?? "30-40 min",
-          deliveryFee: item.deliveryFee ?? 0,
+          deliveryFee:
+            typeof item.deliveryFee === "number" ? item.deliveryFee : 0,
         }));
 
         setRestaurants(mapped);
@@ -58,11 +62,13 @@ export default function HomeScreen() {
     loadRestaurants();
   }, []);
 
-  const filtered = restaurants.filter(
-    (r) =>
+  const filtered = restaurants.filter((r) => {
+    const cuisine = r.cuisine;
+    return (
       r.name.toLowerCase().includes(query.toLowerCase()) ||
-      r.cuisine.toLowerCase().includes(query.toLowerCase())
-  );
+      cuisine.toLowerCase().includes(query.toLowerCase())
+    );
+  });
 
   return (
     <SafeAreaView className="flex-1 bg-light">

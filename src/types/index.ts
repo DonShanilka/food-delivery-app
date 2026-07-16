@@ -1,3 +1,5 @@
+import { NavigatorScreenParams } from "@react-navigation/native";
+
 // ─── Backend-matched Types ────────────────────────────────────────────────────
 
 export interface User {
@@ -11,33 +13,35 @@ export interface User {
 }
 
 export interface Restaurant {
-  _id: string;
+  id: string;
   name: string;
-  description: string;
-  address: string;
-  phone: string;
-  email: string;
-  cuisine: string[];
-  openingTime: string;
-  closingTime: string;
-  category: string;
+  description?: string;
+  address?: string;
+  phone?: string;
+  email?: string;
+  cuisine: string;
+  openingTime?: string;
+  closingTime?: string;
+  category?: string;
   rating: number;
-  isActive: boolean;
-  // image is stored as Buffer on backend; we use a placeholder on mobile
-  image?: string;
+  isActive?: boolean;
+  deliveryTime: string;
+  deliveryFee: number;
+  image: string;
+  menu?: any[];
 }
 
 export interface MenuItem {
-  _id: string;
+  id: string;
   restaurantId: string;
   name: string;
-  description?: string;
+  description: string;
   price: number;
   rating: number;
   isAvailable: boolean;
-  preparationTime?: number;
+  preparationTime: number;
   discount: number;
-  image?: string;
+  image: string;
 }
 
 export interface OrderItem {
@@ -91,10 +95,11 @@ export interface CartItem {
 
 export type RootStackParamList = {
   Splash: undefined;
+  Auth: undefined;
   Login: undefined;
   Register: undefined;
-  MainTabs: undefined;
-  Restaurant: { restaurantId: string; restaurantName: string };
+  MainTabs: NavigatorScreenParams<MainTabParamList>;
+  Restaurant: { restaurantId: string };
   Checkout: undefined;
 };
 

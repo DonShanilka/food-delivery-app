@@ -10,15 +10,19 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import MenuItemRow from "@/components/MenuItemRow";
 import { useCart } from "@/context/CartContext";
-import { apiGet } from "@/services/api";
+import { apiGet, normalizeImageValue } from "@/services/api";
 import { RootStackParamList, Restaurant, MenuItem } from "@/types";
 
 type RestaurantRoute = RouteProp<RootStackParamList, "Restaurant">;
 
 export default function RestaurantScreen() {
-  const navigation = useNavigation();
+  const navigation =
+    useNavigation<
+      NativeStackNavigationProp<RootStackParamList, "Restaurant">
+    >();
   const route = useRoute<RestaurantRoute>();
   const { addToCart, cartCount } = useCart();
   const [restaurant, setRestaurant] = useState<Restaurant | null>(null);
@@ -31,43 +35,60 @@ export default function RestaurantScreen() {
       try {
         setLoading(true);
         const restaurantRes = await apiGet<{ success: boolean; data: any }>(
-          `/resturent/getById/${route.params.restaurantId}`
+          `/resturent/getById/${route.params.restaurantId}`,
         );
         const menuRes = await apiGet<{ success: boolean; data: any[] }>(
-          `/menu/restaurant/${route.params.restaurantId}`
+          `/menu/restaurant/${route.params.restaurantId}`,
         );
 
         setRestaurant({
           id: restaurantRes.data._id,
-          name: restaurantRes.data.name,
+          name: restaurantRes.data.name || "Restaurant",
           cuisine: Array.isArray(restaurantRes.data.cuisine)
             ? restaurantRes.data.cuisine.join(", ")
-            : restaurantRes.data.cuisine || restaurantRes.data.category || "Restaurant",
+            : restaurantRes.data.cuisine ||
+              restaurantRes.data.category ||
+              "Restaurant",
           image:
-            restaurantRes.data.image && typeof restaurantRes.data.image === "string"
-              ? restaurantRes.data.image
-              : "https://via.placeholder.com/640x400.png?text=Restaurant",
-          rating: restaurantRes.data.rating ?? 4.5,
+            normalizeImageValue(restaurantRes.data.image) ||
+            "https://via.placeholder.com/640x400.png?text=Restaurant",
+          rating:
+            typeof restaurantRes.data.rating === "number"
+              ? restaurantRes.data.rating
+              : 4.5,
           deliveryTime: restaurantRes.data.deliveryTime ?? "30-40 min",
-          deliveryFee: restaurantRes.data.deliveryFee ?? 0,
+          deliveryFee:
+            typeof restaurantRes.data.deliveryFee === "number"
+              ? restaurantRes.data.deliveryFee
+              : 0,
+          description: restaurantRes.data.description || "",
+          address: restaurantRes.data.address || "",
+          phone: restaurantRes.data.phone || "",
+          email: restaurantRes.data.email || "",
+          openingTime: restaurantRes.data.openingTime || "",
+          closingTime: restaurantRes.data.closingTime || "",
+          category: restaurantRes.data.category || "",
+          isActive: restaurantRes.data.isActive ?? true,
         });
 
         setMenuItems(
           menuRes.data.map((item) => ({
             id: item._id,
-            restaurantId: item.restaurantId,
-            name: item.name,
+            restaurantId: item.restaurantId ?? route.params.restaurantId,
+            name: item.name || "Menu item",
             description: item.description || "",
-            price: item.price ?? 0,
-            rating: item.rating ?? 0,
+            price: typeof item.price === "number" ? item.price : 0,
+            rating: typeof item.rating === "number" ? item.rating : 0,
             image:
-              item.image && typeof item.image === "string"
-                ? item.image
-                : "https://via.placeholder.com/160x160.png?text=Menu",
+              normalizeImageValue(item.image) ||
+              "https://via.placeholder.com/160x160.png?text=Menu",
             isAvailable: item.isAvailable ?? true,
-            preparationTime: item.preparationTime ?? 25,
-            discount: item.discount ?? 0,
-          }))
+            preparationTime:
+              typeof item.preparationTime === "number"
+                ? item.preparationTime
+                : 25,
+            discount: typeof item.discount === "number" ? item.discount : 0,
+          })),
         );
       } catch (err: any) {
         setError(err.message || "Failed to load restaurant details");
@@ -90,7 +111,9 @@ export default function RestaurantScreen() {
   if (error || !restaurant) {
     return (
       <SafeAreaView className="flex-1 justify-center items-center bg-light px-8">
-        <Text className="text-red-500 text-center">{error || "Restaurant not found."}</Text>
+        <Text className="text-red-500 text-center">
+          {error || "Restaurant not found."}
+        </Text>
       </SafeAreaView>
     );
   }
@@ -98,7 +121,12 @@ export default function RestaurantScreen() {
   return (
     <SafeAreaView className="flex-1 bg-light">
       <View>
-        <Image source={{ uri: restaurant.image }} className="w-full h-48" />
+        <Image
+          source={{ uri: typeof restaurant.image === "string" ? restaurant.image : "" }}
+          onError={() => {}}
+          resizeMode="cover"
+          className="w-full h-48"
+        />
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           className="absolute top-12 left-4 bg-white w-9 h-9 rounded-full items-center justify-center"
@@ -143,7 +171,7 @@ export default function RestaurantScreen() {
       />
       {cartCount > 0 && (
         <TouchableOpacity
-          onPress={() => navigation.navigate("MainTabs" as never, { screen: "Cart" } as never)}
+          onPress={() => navigation.navigate("MainTabs", { screen: "Cart" })}
           className="absolute bottom-6 left-4 right-4 bg-primary rounded-2xl py-4 flex-row justify-center items-center"
         >
           <Ionicons name="bag-handle" size={18} color="white" />
