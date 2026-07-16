@@ -9,8 +9,14 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "@/types";
 
 export default function SplashScreen() {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
   return (
     <>
       <StatusBar barStyle="dark-content" />
@@ -39,6 +45,7 @@ export default function SplashScreen() {
         <TouchableOpacity
           className="w-full px-8 absolute bottom-12"
           activeOpacity={0.8}
+          onPress={() => navigation.navigate("Auth")}
         >
           <LinearGradient
             colors={["#84C441", "#5E9F2D"]}
@@ -46,7 +53,7 @@ export default function SplashScreen() {
             end={{ x: 1, y: 0 }}
             className="rounded-full py-4 flex-row items-center justify-center"
           >
-            <View className="bg-white rounded-full w-10 h-10 justify-center items-center absolute left-3">
+            <View className="bg-white rounded-full w-10 h-10 justify-center items-center mr-4">
               <Ionicons name="arrow-forward" size={20} color="#6BA539" />
             </View>
 
