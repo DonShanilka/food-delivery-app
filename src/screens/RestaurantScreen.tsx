@@ -1,11 +1,19 @@
-import React from "react";
-import { View, Text, Image, FlatList, SafeAreaView, TouchableOpacity } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  Image,
+  FlatList,
+  SafeAreaView,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
 import MenuItemRow from "@/components/MenuItemRow";
-import { restaurants } from "@/data/restaurants";
 import { useCart } from "@/context/CartContext";
-import { RootStackParamList } from "@/types";
+import { apiGet } from "@/services/api";
+import { RootStackParamList, Restaurant, MenuItem } from "@/types";
 
 type RestaurantRoute = RouteProp<RootStackParamList, "Restaurant">;
 
@@ -13,8 +21,79 @@ export default function RestaurantScreen() {
   const navigation = useNavigation();
   const route = useRoute<RestaurantRoute>();
   const { addToCart, cartCount } = useCart();
+  const [restaurant, setRestaurant] = useState<Restaurant | null>(null);
+  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const restaurant = restaurants.find((r) => r.id === route.params.restaurantId)!;
+  useEffect(() => {
+    const fetchRestaurant = async () => {
+      try {
+        setLoading(true);
+        const restaurantRes = await apiGet<{ success: boolean; data: any }>(
+          `/resturent/getById/${route.params.restaurantId}`
+        );
+        const menuRes = await apiGet<{ success: boolean; data: any[] }>(
+          `/menu/restaurant/${route.params.restaurantId}`
+        );
+
+        setRestaurant({
+          id: restaurantRes.data._id,
+          name: restaurantRes.data.name,
+          cuisine: Array.isArray(restaurantRes.data.cuisine)
+            ? restaurantRes.data.cuisine.join(", ")
+            : restaurantRes.data.cuisine || restaurantRes.data.category || "Restaurant",
+          image:
+            restaurantRes.data.image && typeof restaurantRes.data.image === "string"
+              ? restaurantRes.data.image
+              : "https://via.placeholder.com/640x400.png?text=Restaurant",
+          rating: restaurantRes.data.rating ?? 4.5,
+          deliveryTime: restaurantRes.data.deliveryTime ?? "30-40 min",
+          deliveryFee: restaurantRes.data.deliveryFee ?? 0,
+        });
+
+        setMenuItems(
+          menuRes.data.map((item) => ({
+            id: item._id,
+            restaurantId: item.restaurantId,
+            name: item.name,
+            description: item.description || "",
+            price: item.price ?? 0,
+            rating: item.rating ?? 0,
+            image:
+              item.image && typeof item.image === "string"
+                ? item.image
+                : "https://via.placeholder.com/160x160.png?text=Menu",
+            isAvailable: item.isAvailable ?? true,
+            preparationTime: item.preparationTime ?? 25,
+            discount: item.discount ?? 0,
+          }))
+        );
+      } catch (err: any) {
+        setError(err.message || "Failed to load restaurant details");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRestaurant();
+  }, [route.params.restaurantId]);
+
+  if (loading) {
+    return (
+      <SafeAreaView className="flex-1 justify-center items-center bg-light">
+        <ActivityIndicator size="large" color="#84C441" />
+      </SafeAreaView>
+    );
+  }
+
+  if (error || !restaurant) {
+    return (
+      <SafeAreaView className="flex-1 justify-center items-center bg-light px-8">
+        <Text className="text-red-500 text-center">{error || "Restaurant not found."}</Text>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView className="flex-1 bg-light">
@@ -35,12 +114,18 @@ export default function RestaurantScreen() {
           <Text className="text-dark text-sm ml-1">{restaurant.rating}</Text>
           <Text className="text-muted text-sm mx-2">·</Text>
           <Text className="text-muted text-sm">{restaurant.deliveryTime}</Text>
+          <Text className="text-muted text-sm mx-2">·</Text>
+          <Text className="text-muted text-sm">
+            {restaurant.deliveryFee === 0
+              ? "Free delivery"
+              : `$${restaurant.deliveryFee.toFixed(2)} delivery`}
+          </Text>
         </View>
       </View>
       <FlatList
-        data={restaurant.menu}
+        data={menuItems}
         keyExtractor={(item) => item.id}
-        contentContainerStyle={{ padding: 16, paddingBottom: 100 }}
+        contentContainerStyle={{ padding: 16, paddingBottom: 120 }}
         ListHeaderComponent={
           <Text className="text-dark font-bold text-lg mb-3 mt-2">Menu</Text>
         }
@@ -50,6 +135,11 @@ export default function RestaurantScreen() {
             onAdd={() => addToCart(item, restaurant.id, restaurant.name)}
           />
         )}
+        ListEmptyComponent={
+          <View className="items-center mt-20">
+            <Text className="text-muted">No menu items available.</Text>
+          </View>
+        }
       />
       {cartCount > 0 && (
         <TouchableOpacity
