@@ -1,6 +1,9 @@
 import React from "react";
 import { View, Text, TouchableOpacity, SafeAreaView } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "@/types";
 
 const menuItems: { icon: keyof typeof Ionicons.glyphMap; label: string }[] = [
   { icon: "person-outline", label: "Personal Information" },
@@ -12,6 +15,17 @@ const menuItems: { icon: keyof typeof Ionicons.glyphMap; label: string }[] = [
 ];
 
 export default function ProfileScreen() {
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+  const handleMenuPress = (label: string) => {
+    if (label === "Log Out") {
+      navigation.reset({
+        index: 0,
+        routes: [{ name: "Login" }],
+      });
+    }
+  };
+
   return (
     <SafeAreaView className="flex-1 bg-light">
       <View className="px-4 pt-6 items-center">
@@ -26,6 +40,8 @@ export default function ProfileScreen() {
           <TouchableOpacity
             key={mi.label}
             className="flex-row items-center bg-white rounded-2xl px-4 py-4 mb-3"
+            activeOpacity={0.8}
+            onPress={() => handleMenuPress(mi.label)}
           >
             <Ionicons name={mi.icon} size={20} color="#FF6B35" />
             <Text className="text-dark ml-3 flex-1">{mi.label}</Text>
