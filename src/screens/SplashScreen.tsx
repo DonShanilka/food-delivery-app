@@ -22,7 +22,7 @@ export default function SplashScreen() {
             SOLENA
           </Text>
 
-          <Text className="text-gray-500 text-xl mt-3">
+          <Text className="text-gray-500 text-x mt-3">
             Healthy Food Delivery
           </Text>
         </View>

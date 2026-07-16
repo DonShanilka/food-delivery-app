@@ -90,7 +90,9 @@ export interface CartItem {
 // ─── Navigation ───────────────────────────────────────────────────────────────
 
 export type RootStackParamList = {
-  Auth: undefined;
+  Splash: undefined;
+  Login: undefined;
+  Register: undefined;
   MainTabs: undefined;
   Restaurant: { restaurantId: string; restaurantName: string };
   Checkout: undefined;

@@ -5,18 +5,16 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import RootNavigator from "@/navigation/RootNavigator";
 import { CartProvider } from "@/context/CartContext";
-import SplashScreen from "@/screens/SplashScreen";
 
 export default function App() {
   return (
     <SafeAreaProvider>
-      {/* <CartProvider>
+      <CartProvider>
         <StatusBar style="dark" />
         <NavigationContainer>
           <RootNavigator />
         </NavigationContainer>
-      </CartProvider> */}
-      <SplashScreen/>
+      </CartProvider>
     </SafeAreaProvider>
   );
 }
