@@ -11,9 +11,12 @@ import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "@/types";
 import { apiPost } from "@/services/api";
+import { useAuth } from "@/context/AuthContext";
 
 export default function LoginScreen() {
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const { setUser } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -24,9 +27,15 @@ export default function LoginScreen() {
     setLoading(true);
 
     try {
-      const result = await apiPost("/users/login", { email, password });
+      const result = await apiPost<{ success: boolean; data: any }>(
+        "/users/login",
+        { email, password },
+      );
       console.log("Login success", result);
-      navigation.navigate("MainTabs");
+      if (result?.data) {
+        await setUser(result.data);
+      }
+      navigation.navigate("MainTabs", { screen: "Home" });
     } catch (err: any) {
       setError(err.message);
     } finally {

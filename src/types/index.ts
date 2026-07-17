@@ -9,7 +9,10 @@ export interface User {
   email: string;
   phone?: string;
   role: 'CUSTOMER' | 'DRIVER' | 'RESTAURANT' | 'ADMIN';
+  profile_image?: string;
   status: 'ACTIVE' | 'INACTIVE' | 'BLOCKED';
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface Restaurant {

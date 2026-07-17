@@ -93,3 +93,21 @@ export async function apiPost<T>(path: string, body: any): Promise<T> {
 
   return json;
 }
+
+export async function apiPut<T>(path: string, body: any): Promise<T> {
+  const response = await fetch(`${BASE_URL}${path}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+
+  const json = await response.json();
+
+  if (!response.ok) {
+    throw new Error(json?.message || "Server error");
+  }
+
+  return json;
+}
