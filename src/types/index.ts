@@ -8,6 +8,7 @@ export interface User {
   last_name?: string;
   email: string;
   phone?: string;
+  address?: string;
   role: 'CUSTOMER' | 'DRIVER' | 'RESTAURANT' | 'ADMIN';
   profile_image?: string;
   status: 'ACTIVE' | 'INACTIVE' | 'BLOCKED';
@@ -70,25 +71,26 @@ export interface Order {
   _id: string;
   userId?: string;
   restaurantId?: string | Restaurant;
+  restaurantName?: string;
   driverId?: string;
   items: OrderItem[];
   address: string;
   phoneNumber: string;
   totalPrice: number;
   status: OrderStatus;
-  paymentStatus: PaymentStatus;
+  paymentStatus?: PaymentStatus;
   paymentMethod: PaymentMethod;
   notes?: string;
   estimatedDeliveryTime?: number;
   deliveredAt?: string;
   createdAt: string;
-  updatedAt: string;
+  updatedAt?: string;
 }
 
 // ─── Cart (local state only) ──────────────────────────────────────────────────
 
 export interface CartItem {
-  menuItem: MenuItem;
+  item: MenuItem;
   restaurantId: string;
   restaurantName: string;
   quantity: number;

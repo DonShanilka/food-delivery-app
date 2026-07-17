@@ -137,17 +137,23 @@ export default function RestaurantScreen() {
       <View className="px-4 pt-4">
         <Text className="text-dark font-bold text-2xl">{restaurant.name}</Text>
         <Text className="text-muted mt-1">{restaurant.cuisine}</Text>
-        <View className="flex-row items-center mt-2">
-          <Ionicons name="star" size={14} color="#FF6B35" />
-          <Text className="text-dark text-sm ml-1">{restaurant.rating}</Text>
-          <Text className="text-muted text-sm mx-2">·</Text>
-          <Text className="text-muted text-sm">{restaurant.deliveryTime}</Text>
-          <Text className="text-muted text-sm mx-2">·</Text>
-          <Text className="text-muted text-sm">
-            {restaurant.deliveryFee === 0
-              ? "Free delivery"
-              : `$${restaurant.deliveryFee.toFixed(2)} delivery`}
-          </Text>
+        <View className="flex-row flex-wrap items-center gap-2 mt-3">
+          <View className="flex-row items-center bg-white/90 rounded-full px-3 py-2 border border-gray-200">
+            <Ionicons name="star" size={14} color="#FF6B35" />
+            <Text className="text-dark text-sm ml-1">{restaurant.rating}</Text>
+          </View>
+          <View className="flex-row items-center bg-white/90 rounded-full px-3 py-2 border border-gray-200">
+            <Ionicons name="time-outline" size={14} color="#5E9F2D" />
+            <Text className="text-dark text-sm ml-1">{restaurant.deliveryTime}</Text>
+          </View>
+          <View className="flex-row items-center bg-white/90 rounded-full px-3 py-2 border border-gray-200">
+            <Ionicons name="cart-outline" size={14} color="#FF6B35" />
+            <Text className="text-dark text-sm ml-1">
+              {restaurant.deliveryFee === 0
+                ? "Free delivery"
+                : `$${restaurant.deliveryFee.toFixed(2)}`}
+            </Text>
+          </View>
         </View>
       </View>
       <FlatList

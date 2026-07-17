@@ -27,38 +27,75 @@ export default function CartScreen() {
       <FlatList
         data={cart}
         keyExtractor={(c) => c.item.id}
-        contentContainerStyle={{ padding: 16 }}
+        contentContainerStyle={{ padding: 16, paddingBottom: 160 }}
         renderItem={({ item: c }) => (
-          <View className="flex-row bg-white rounded-2xl p-3 mb-3 items-center">
-            <Image source={{ uri: c.item.image }} className="w-16 h-16 rounded-xl" />
-            <View className="flex-1 ml-3">
-              <Text className="text-dark font-semibold">{c.item.name}</Text>
-              <Text className="text-primary font-bold mt-1">
-                ${(c.item.price * c.quantity).toFixed(2)}
-              </Text>
+          <View className="bg-white rounded-3xl p-4 mb-4 shadow-sm border border-gray-100">
+            <View className="flex-row items-center">
+              <Image
+                source={{ uri: c.item.image }}
+                className="w-16 h-16 rounded-3xl"
+              />
+              <View className="flex-1 ml-4">
+                <Text className="text-dark font-semibold text-base">
+                  {c.item.name}
+                </Text>
+                <Text className="text-primary font-bold mt-1 text-sm">
+                  ${(c.item.price * c.quantity).toFixed(2)}
+                </Text>
+                <Text className="text-muted text-xs mt-1">
+                  {c.item.description ?? "Delicious choice"}
+                </Text>
+              </View>
+              <TouchableOpacity
+                onPress={() => removeFromCart(c.item.id)}
+                className="p-2 rounded-full"
+                activeOpacity={0.8}
+              >
+                <Ionicons name="trash-outline" size={22} color="#FF6B35" />
+              </TouchableOpacity>
             </View>
-            <View className="flex-row items-center bg-light rounded-full px-2 py-1">
-              <TouchableOpacity onPress={() => updateQuantity(c.item.id, -1)}>
-                <Ionicons name="remove-circle-outline" size={22} color="#FF6B35" />
-              </TouchableOpacity>
-              <Text className="mx-2 text-dark font-medium">{c.quantity}</Text>
-              <TouchableOpacity onPress={() => updateQuantity(c.item.id, 1)}>
-                <Ionicons name="add-circle-outline" size={22} color="#FF6B35" />
-              </TouchableOpacity>
+            <View className="flex-row items-center justify-between mt-4 bg-light rounded-full px-2 py-2">
+              <View className="flex-row items-center">
+                <TouchableOpacity
+                  onPress={() => updateQuantity(c.item.id, -1)}
+                  className="p-2 rounded-full"
+                  activeOpacity={0.8}
+                >
+                  <Ionicons name="remove-circle-outline" size={24} color="#FF6B35" />
+                </TouchableOpacity>
+                <Text className="mx-3 text-dark font-semibold">{c.quantity}</Text>
+                <TouchableOpacity
+                  onPress={() => updateQuantity(c.item.id, 1)}
+                  className="p-2 rounded-full"
+                  activeOpacity={0.8}
+                >
+                  <Ionicons name="add-circle-outline" size={24} color="#FF6B35" />
+                </TouchableOpacity>
+              </View>
+              <Text className="text-xs text-muted uppercase tracking-[0.2em]">
+                Quantity
+              </Text>
             </View>
           </View>
         )}
       />
       <View className="px-4 pb-6">
-        <View className="flex-row justify-between mb-4">
-          <Text className="text-muted text-base">Subtotal</Text>
-          <Text className="text-dark font-bold text-base">
-            ${cartTotal.toFixed(2)}
-          </Text>
+        <View className="bg-white rounded-3xl p-4 mb-4 shadow-sm border border-gray-100">
+          <View className="flex-row justify-between mb-2">
+            <Text className="text-muted text-base">Subtotal</Text>
+            <Text className="text-dark font-semibold text-base">
+              ${cartTotal.toFixed(2)}
+            </Text>
+          </View>
+          <View className="flex-row justify-between">
+            <Text className="text-muted text-sm">Delivery</Text>
+            <Text className="text-dark font-semibold text-sm">$1.99</Text>
+          </View>
         </View>
         <TouchableOpacity
           onPress={() => navigation.navigate("Checkout")}
-          className="bg-primary rounded-2xl py-4 items-center"
+          activeOpacity={0.85}
+          className="bg-primary rounded-3xl py-4 items-center shadow-lg"
         >
           <Text className="text-white font-bold text-base">
             Proceed to Checkout

@@ -4,11 +4,16 @@ import { CartItem, MenuItem, Order } from "@/types";
 interface CartContextType {
   cart: CartItem[];
   orders: Order[];
-  addToCart: (item: MenuItem, restaurantId: string, restaurantName: string) => void;
+  addToCart: (
+    item: MenuItem,
+    restaurantId: string,
+    restaurantName: string,
+  ) => void;
   removeFromCart: (itemId: string) => void;
   updateQuantity: (itemId: string, delta: number) => void;
   clearCart: () => void;
-  placeOrder: () => void;
+  placeOrder: (order?: Order) => void;
+  loadOrders: (orders: Order[]) => void;
   cartTotal: number;
   cartCount: number;
 }
@@ -19,12 +24,16 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
 
-  const addToCart = (item: MenuItem, restaurantId: string, restaurantName: string) => {
+  const addToCart = (
+    item: MenuItem,
+    restaurantId: string,
+    restaurantName: string,
+  ) => {
     setCart((prev) => {
       const existing = prev.find((c) => c.item.id === item.id);
       if (existing) {
         return prev.map((c) =>
-          c.item.id === item.id ? { ...c, quantity: c.quantity + 1 } : c
+          c.item.id === item.id ? { ...c, quantity: c.quantity + 1 } : c,
         );
       }
       return [...prev, { item, restaurantId, restaurantName, quantity: 1 }];
@@ -32,16 +41,16 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const removeFromCart = (itemId: string) => {
-    setCart((prev) => prev.filter((c) => c.item.id !== itemId));
+    setCart((prev: any) => prev.filter((c: any) => c.item.id !== itemId));
   };
 
   const updateQuantity = (itemId: string, delta: number) => {
-    setCart((prev) =>
+    setCart((prev: any) =>
       prev
-        .map((c) =>
-          c.item.id === itemId ? { ...c, quantity: c.quantity + delta } : c
+        .map((c: any) =>
+          c.item.id === itemId ? { ...c, quantity: c.quantity + delta } : c,
         )
-        .filter((c) => c.quantity > 0)
+        .filter((c: any) => c.quantity > 0),
     );
   };
 
@@ -50,18 +59,35 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const cartTotal = cart.reduce((sum, c) => sum + c.item.price * c.quantity, 0);
   const cartCount = cart.reduce((sum, c) => sum + c.quantity, 0);
 
-  const placeOrder = () => {
+  const placeOrder = (order?: Order) => {
+    if (order) {
+      setOrders((prev) => [order, ...prev]);
+      clearCart();
+      return;
+    }
+
     if (cart.length === 0) return;
     const newOrder: Order = {
-      id: Date.now().toString(),
-      items: cart,
-      total: cartTotal,
-      status: "preparing",
-      restaurantName: cart[0].restaurantName,
+      _id: Date.now().toString(),
+      items: cart.map((c) => ({
+        name: c.item.name,
+        quantity: c.quantity,
+        price: c.item.price,
+      })),
+      address: "Home",
+      phoneNumber: "",
+      totalPrice: cartTotal,
+      status: "PENDING",
+      paymentMethod: "CASH",
       createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     };
     setOrders((prev) => [newOrder, ...prev]);
     clearCart();
+  };
+
+  const loadOrders = (orders: Order[]) => {
+    setOrders(orders);
   };
 
   return (
@@ -74,6 +100,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         updateQuantity,
         clearCart,
         placeOrder,
+        loadOrders,
         cartTotal,
         cartCount,
       }}
