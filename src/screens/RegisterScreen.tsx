@@ -6,7 +6,6 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "@/types";
@@ -42,13 +41,7 @@ export default function RegisterScreen() {
   };
 
   return (
-    <LinearGradient
-      colors={["#84C441", "#5E9F2D"]}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
-      className="flex-1"
-    >
-      <SafeAreaView className="flex-1 px-6 pt-12">
+    <SafeAreaView className="flex-1 bg-white px-6 pt-12">
         <View className="mb-10">
           <Text className="text-4xl font-extrabold text-white">
             Create Account
@@ -58,7 +51,7 @@ export default function RegisterScreen() {
           </Text>
         </View>
 
-        <View className="bg-white rounded-[30px] p-6 shadow-lg">
+        <View className="bg-slate-50 rounded-[30px] p-6">
           <Text className="text-gray-700 text-sm font-semibold mb-2">
             Full name
           </Text>
@@ -121,6 +114,6 @@ export default function RegisterScreen() {
           </View>
         </View>
       </SafeAreaView>
-    </LinearGradient>
+    // </LinearGradient>
   );
 }

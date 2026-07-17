@@ -10,7 +10,7 @@ import { Order, OrderStatus } from "@/types";
 const statusConfig: Record<OrderStatus, { label: string; color: string; icon: string }> = {
   PENDING: { label: "Pending", color: "#FFB703", icon: "time-outline" },
   CONFIRMED: { label: "Confirmed", color: "#2196F3", icon: "checkmark-done-outline" },
-  PREPARING: { label: "Preparing", color: "#FF6B35", icon: "restaurant-outline" },
+  PREPARING: { label: "Preparing", color: "#5E9F2D", icon: "restaurant-outline" },
   READY_FOR_PICKUP: { label: "Ready", color: "#4CAF50", icon: "bicycle-outline" },
   OUT_FOR_DELIVERY: { label: "On the way", color: "#2EC4B6", icon: "bicycle-outline" },
   DELIVERED: { label: "Delivered", color: "#4CAF50", icon: "checkmark-circle-outline" },
@@ -46,7 +46,7 @@ export default function OrdersScreen() {
 
   if (loading) {
     return (
-      <SafeAreaView className="flex-1 bg-light items-center justify-center">
+      <SafeAreaView className="flex-1 bg-white items-center justify-center">
         <Text className="text-dark text-base">Loading orders...</Text>
       </SafeAreaView>
     );
@@ -54,7 +54,7 @@ export default function OrdersScreen() {
 
   if (!user) {
     return (
-      <SafeAreaView className="flex-1 bg-light items-center justify-center px-6">
+      <SafeAreaView className="flex-1 bg-white items-center justify-center px-6">
         <Text className="text-dark text-base text-center">
           Please login to view your orders.
         </Text>
@@ -64,9 +64,9 @@ export default function OrdersScreen() {
 
   if (orders.length === 0) {
     return (
-      <SafeAreaView className="flex-1 bg-light items-center justify-center px-6">
-        <Ionicons name="receipt-outline" size={64} color="#8A8A8A" />
-        <Text className="text-muted text-base mt-4">No orders yet</Text>
+      <SafeAreaView className="flex-1 bg-white items-center justify-center px-6">
+        <Ionicons name="receipt-outline" size={64} color="#5E9F2D" />
+        <Text className="text-neutral-500 text-base mt-4">No orders yet</Text>
         {error ? (
           <Text className="text-red-500 text-sm mt-2">{error}</Text>
         ) : null}
@@ -75,7 +75,7 @@ export default function OrdersScreen() {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-light">
+    <SafeAreaView className="flex-1 bg-white">
       <Text className="text-dark font-bold text-2xl px-4 pt-4 mb-2">
         Your Orders
       </Text>
@@ -86,7 +86,7 @@ export default function OrdersScreen() {
         renderItem={({ item: order }) => {
           const status = statusConfig[order.status];
           return (
-            <View className="bg-white rounded-3xl p-4 mb-4 shadow-sm border border-gray-100">
+            <View className="bg-white rounded-3xl p-4 mb-4">
               <View className="flex-row justify-between items-start">
                 <View className="flex-1 pr-2">
                   <Text className="text-dark font-semibold text-base">

@@ -23,8 +23,7 @@ export default function RestaurantCard({ restaurant, onPress }: Props) {
   return (
     <TouchableOpacity
       onPress={onPress}
-      className="bg-white rounded-2xl mb-4 overflow-hidden shadow-sm"
-      style={{ elevation: 2 }}
+      className="bg-white rounded-2xl mb-4 overflow-hidden"
     >
       <Image
         source={{ uri: failed ? PLACEHOLDER : uri }}
@@ -36,7 +35,7 @@ export default function RestaurantCard({ restaurant, onPress }: Props) {
         <Text className="text-dark font-bold text-lg">{restaurant.name}</Text>
         <Text className="text-muted text-sm mt-0.5">{cuisineLabel}</Text>
         <View className="flex-row items-center mt-2">
-          <Ionicons name="star" size={14} color="#FF6B35" />
+          <Ionicons name="star" size={14} color="#5E9F2D" />
           <Text className="text-dark text-sm ml-1 font-medium">
             {restaurant.rating?.toFixed(1) ?? "4.5"}
           </Text>

@@ -79,7 +79,7 @@ export default function ProfileScreen() {
 
   if (!user) {
     return (
-      <SafeAreaView className="flex-1 bg-light px-4 justify-center">
+      <SafeAreaView className="flex-1 bg-white px-4 justify-center">
         <Text className="text-center text-dark text-lg mb-4">
           Please log in to view your profile.
         </Text>
@@ -94,7 +94,7 @@ export default function ProfileScreen() {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-light">
+    <SafeAreaView className="flex-1 bg-white">
       <ScrollView contentContainerStyle={{ padding: 16 }}>
         <View className="items-center mb-6">
           <Image
@@ -108,10 +108,7 @@ export default function ProfileScreen() {
           <Text className="text-muted text-sm">{email}</Text>
         </View>
 
-        <View
-          className="bg-white rounded-3xl p-5 space-y-4 shadow-sm"
-          style={{ elevation: 2 }}
-        >
+        <View className="bg-white rounded-3xl p-5 space-y-4">
           <Text className="text-dark font-semibold text-lg">
             Profile Details
           </Text>
@@ -121,7 +118,7 @@ export default function ProfileScreen() {
             <TextInput
               value={firstName}
               onChangeText={setFirstName}
-              className="border border-gray-200 rounded-2xl px-4 py-3 text-base text-dark"
+              className="bg-slate-50 rounded-2xl px-4 py-3 text-base text-dark"
             />
           </View>
 
@@ -130,7 +127,7 @@ export default function ProfileScreen() {
             <TextInput
               value={lastName}
               onChangeText={setLastName}
-              className="border border-gray-200 rounded-2xl px-4 py-3 text-base text-dark"
+              className="bg-slate-50 rounded-2xl px-4 py-3 text-base text-dark"
             />
           </View>
 
@@ -141,7 +138,7 @@ export default function ProfileScreen() {
               onChangeText={setEmail}
               keyboardType="email-address"
               autoCapitalize="none"
-              className="border border-gray-200 rounded-2xl px-4 py-3 text-base text-dark"
+              className="bg-slate-50 rounded-2xl px-4 py-3 text-base text-dark"
             />
           </View>
 
@@ -151,7 +148,7 @@ export default function ProfileScreen() {
               value={phone}
               onChangeText={setPhone}
               keyboardType="phone-pad"
-              className="border border-gray-200 rounded-2xl px-4 py-3 text-base text-dark"
+              className="bg-slate-50 rounded-2xl px-4 py-3 text-base text-dark"
             />
           </View>
 
@@ -161,7 +158,7 @@ export default function ProfileScreen() {
               value={profileImage}
               onChangeText={setProfileImage}
               placeholder="https://..."
-              className="border border-gray-200 rounded-2xl px-4 py-3 text-base text-dark"
+              className="bg-slate-50 rounded-2xl px-4 py-3 text-base text-dark"
             />
           </View>
 
@@ -181,7 +178,7 @@ export default function ProfileScreen() {
           ) : null}
 
           <TouchableOpacity
-            className="bg-primary rounded-2xl py-4 items-center"
+            className="bg-[#5E9F2D] rounded-2xl py-4 items-center"
             onPress={handleSave}
             disabled={loading}
           >
@@ -193,10 +190,10 @@ export default function ProfileScreen() {
           </TouchableOpacity>
 
           <TouchableOpacity
-            className="bg-white rounded-2xl py-4 items-center border border-red-200"
+            className="bg-slate-50 rounded-2xl py-4 items-center"
             onPress={handleLogout}
           >
-            <Text className="text-red-500 font-bold">Logout</Text>
+            <Text className="text-[#5E9F2D] font-bold">Logout</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

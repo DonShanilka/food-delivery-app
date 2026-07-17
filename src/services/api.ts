@@ -1,4 +1,32 @@
-export const BASE_URL = "http://localhost:3000/api";
+import Constants from "expo-constants";
+
+const localHost =
+  Constants.manifest?.debuggerHost?.split(":").shift() ||
+  Constants.expoConfig?.extra?.localHost ||
+  "localhost";
+
+export const BASE_URL = __DEV__
+  ? `http://${localHost}:3000/api`
+  : "http://localhost:3000/api";
+
+async function parseJsonResponse<T>(response: Response): Promise<T> {
+  const contentType = response.headers.get("Content-Type")?.toLowerCase() || "";
+  const text = await response.text();
+
+  if (!text) {
+    return {} as T;
+  }
+
+  if (contentType.includes("application/json")) {
+    return JSON.parse(text) as T;
+  }
+
+  try {
+    return JSON.parse(text) as T;
+  } catch {
+    return text as unknown as T;
+  }
+}
 
 export function normalizeImageValue(value: any): string | undefined {
   if (!value) {
@@ -65,12 +93,39 @@ function bytesToBase64(bytes: number[]): string {
   return result;
 }
 
+async function parseResponse<T>(response: Response): Promise<T> {
+  if (response.status === 204) {
+    return {} as T;
+  }
+
+  const contentType = response.headers.get("Content-Type")?.toLowerCase() || "";
+  const text = await response.text();
+
+  if (!text) {
+    return {} as T;
+  }
+
+  if (contentType.includes("application/json")) {
+    try {
+      return JSON.parse(text) as T;
+    } catch (parseError) {
+      throw new Error("Invalid JSON response from server.");
+    }
+  }
+
+  try {
+    return JSON.parse(text) as T;
+  } catch {
+    throw new Error("Unexpected response format from server.");
+  }
+}
+
 export async function apiGet<T>(path: string): Promise<T> {
   const response = await fetch(`${BASE_URL}${path}`);
-  const json = await response.json();
+  const json = await parseResponse<T>(response);
 
   if (!response.ok) {
-    throw new Error(json?.message || "Server error");
+    throw new Error((json as any)?.message || "Server error");
   }
 
   return json;
@@ -85,10 +140,10 @@ export async function apiPost<T>(path: string, body: any): Promise<T> {
     body: JSON.stringify(body),
   });
 
-  const json = await response.json();
+  const json = await parseResponse<T>(response);
 
   if (!response.ok) {
-    throw new Error(json?.message || "Server error");
+    throw new Error((json as any)?.message || "Server error");
   }
 
   return json;
@@ -103,10 +158,10 @@ export async function apiPut<T>(path: string, body: any): Promise<T> {
     body: JSON.stringify(body),
   });
 
-  const json = await response.json();
+  const json = await parseResponse<T>(response);
 
   if (!response.ok) {
-    throw new Error(json?.message || "Server error");
+    throw new Error((json as any)?.message || "Server error");
   }
 
   return json;

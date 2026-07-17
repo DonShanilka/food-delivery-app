@@ -51,7 +51,7 @@ export default function CartScreen() {
                 className="p-2 rounded-full"
                 activeOpacity={0.8}
               >
-                <Ionicons name="trash-outline" size={22} color="#FF6B35" />
+                <Ionicons name="trash-outline" size={22} color="#5E9F2D" />
               </TouchableOpacity>
             </View>
             <View className="flex-row items-center justify-between mt-4 bg-slate-50 rounded-full px-2 py-2">
@@ -61,7 +61,7 @@ export default function CartScreen() {
                   className="p-2 rounded-full"
                   activeOpacity={0.8}
                 >
-                  <Ionicons name="remove-circle-outline" size={24} color="#FF6B35" />
+                  <Ionicons name="remove-circle-outline" size={24} color="#5E9F2D" />
                 </TouchableOpacity>
                 <Text className="mx-3 text-dark font-semibold">{c.quantity}</Text>
                 <TouchableOpacity
@@ -69,7 +69,7 @@ export default function CartScreen() {
                   className="p-2 rounded-full"
                   activeOpacity={0.8}
                 >
-                  <Ionicons name="add-circle-outline" size={24} color="#FF6B35" />
+                  <Ionicons name="add-circle-outline" size={24} color="#5E9F2D" />
                 </TouchableOpacity>
               </View>
               <Text className="text-xs text-muted uppercase tracking-[0.2em]">

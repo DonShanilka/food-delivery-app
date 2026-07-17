@@ -17,7 +17,7 @@ export default function MenuItemRow({ item, onAdd }: Props) {
     : PLACEHOLDER;
 
   return (
-    <View className="flex-row bg-white rounded-2xl p-3 mb-3 items-center shadow-sm" style={{ elevation: 1 }}>
+    <View className="flex-row bg-white rounded-2xl p-3 mb-3 items-center">
       <Image
         source={{ uri: failed ? PLACEHOLDER : imageUri }}
         onError={() => setFailed(true)}

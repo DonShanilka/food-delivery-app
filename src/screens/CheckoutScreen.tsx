@@ -101,7 +101,7 @@ export default function CheckoutScreen() {
             <Text className="text-neutral-500 text-sm">Checkout</Text>
             <Text className="text-black font-bold text-3xl">Your Basket</Text>
           </View>
-          <View className="bg-[#84C441] px-4 py-2 rounded-full">
+          <View className="bg-[#5E9F2D] px-4 py-2 rounded-full">
             <Text className="text-white text-sm">{cart.length} items</Text>
           </View>
         </View>
@@ -135,7 +135,7 @@ export default function CheckoutScreen() {
               <Text className="text-black font-semibold text-base">Order Items</Text>
               <Text className="text-muted text-sm mt-1">Swipe or tap to edit quantities</Text>
             </View>
-            <Ionicons name="basket-outline" size={24} color="#FF6B35" />
+            <Ionicons name="basket-outline" size={24} color="#5E9F2D" />
           </View>
           {cart.map((c) => (
             <View key={c.item.id} className="flex-row items-center justify-between mb-4">
@@ -149,7 +149,7 @@ export default function CheckoutScreen() {
                   activeOpacity={0.8}
                   className="p-1 rounded-full"
                 >
-                  <Ionicons name="remove-circle-outline" size={22} color="#FF6B35" />
+                  <Ionicons name="remove-circle-outline" size={22} color="#5E9F2D" />
                 </TouchableOpacity>
                 <Text className="px-4 text-dark font-semibold">{c.quantity}</Text>
                 <TouchableOpacity
@@ -157,7 +157,7 @@ export default function CheckoutScreen() {
                   activeOpacity={0.8}
                   className="p-1 rounded-full"
                 >
-                  <Ionicons name="add-circle-outline" size={22} color="#FF6B35" />
+                  <Ionicons name="add-circle-outline" size={22} color="#5E9F2D" />
                 </TouchableOpacity>
               </View>
             </View>
@@ -199,7 +199,7 @@ export default function CheckoutScreen() {
             <Text className="text-muted">Delivery fee</Text>
             <Text className="text-dark font-semibold">${deliveryFee.toFixed(2)}</Text>
           </View>
-          <View className="border-t border-gray-100 pt-4 flex-row justify-between items-center">
+          <View className="pt-4 flex-row justify-between items-center">
             <Text className="text-dark font-bold text-lg">Total</Text>
             <Text className="text-black font-bold text-lg">${total.toFixed(2)}</Text>
           </View>
@@ -207,7 +207,7 @@ export default function CheckoutScreen() {
       </ScrollView>
 
       {error ? (
-        <View className="absolute bottom-24 left-4 right-4 bg-red-100 rounded-3xl p-3 shadow-md">
+        <View className="absolute bottom-24 left-4 right-4 bg-red-100 rounded-3xl p-3">
           <Text className="text-red-700 text-sm text-center">{error}</Text>
         </View>
       ) : null}
@@ -219,7 +219,7 @@ export default function CheckoutScreen() {
           activeOpacity={0.85}
           className={`rounded-[30px] py-4 items-center ${
             loading ? "bg-gray-400" : "bg-black"
-          } shadow-lg`}
+          }`}
         >
           <Text className="text-white font-bold text-base">
             {loading ? "Placing order..." : `Checkout · $${total.toFixed(2)}`}

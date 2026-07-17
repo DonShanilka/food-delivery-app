@@ -102,7 +102,7 @@ export default function RestaurantScreen() {
 
   if (loading) {
     return (
-      <SafeAreaView className="flex-1 justify-center items-center bg-light">
+      <SafeAreaView className="flex-1 justify-center items-center bg-white">
         <ActivityIndicator size="large" color="#84C441" />
       </SafeAreaView>
     );
@@ -110,7 +110,7 @@ export default function RestaurantScreen() {
 
   if (error || !restaurant) {
     return (
-      <SafeAreaView className="flex-1 justify-center items-center bg-light px-8">
+      <SafeAreaView className="flex-1 justify-center items-center bg-white px-8">
         <Text className="text-red-500 text-center">
           {error || "Restaurant not found."}
         </Text>
@@ -119,7 +119,7 @@ export default function RestaurantScreen() {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-light">
+    <SafeAreaView className="flex-1 bg-white">
       <View>
         <Image
           source={{ uri: typeof restaurant.image === "string" ? restaurant.image : "" }}
@@ -138,16 +138,16 @@ export default function RestaurantScreen() {
         <Text className="text-dark font-bold text-2xl">{restaurant.name}</Text>
         <Text className="text-muted mt-1">{restaurant.cuisine}</Text>
         <View className="flex-row flex-wrap items-center gap-2 mt-3">
-          <View className="flex-row items-center bg-white/90 rounded-full px-3 py-2 border border-gray-200">
-            <Ionicons name="star" size={14} color="#FF6B35" />
+          <View className="flex-row items-center bg-white/90 rounded-full px-3 py-2">
+            <Ionicons name="star" size={14} color="#5E9F2D" />
             <Text className="text-dark text-sm ml-1">{restaurant.rating}</Text>
           </View>
           <View className="flex-row items-center bg-white/90 rounded-full px-3 py-2 border border-gray-200">
             <Ionicons name="time-outline" size={14} color="#5E9F2D" />
             <Text className="text-dark text-sm ml-1">{restaurant.deliveryTime}</Text>
           </View>
-          <View className="flex-row items-center bg-white/90 rounded-full px-3 py-2 border border-gray-200">
-            <Ionicons name="cart-outline" size={14} color="#FF6B35" />
+          <View className="flex-row items-center bg-white/90 rounded-full px-3 py-2">
+            <Ionicons name="cart-outline" size={14} color="#5E9F2D" />
             <Text className="text-dark text-sm ml-1">
               {restaurant.deliveryFee === 0
                 ? "Free delivery"
@@ -178,7 +178,7 @@ export default function RestaurantScreen() {
       {cartCount > 0 && (
         <TouchableOpacity
           onPress={() => navigation.navigate("MainTabs", { screen: "Cart" })}
-          className="absolute bottom-6 left-4 right-4 bg-primary rounded-2xl py-4 flex-row justify-center items-center"
+          className="absolute bottom-6 left-4 right-4 bg-[#5E9F2D] rounded-2xl py-4 flex-row justify-center items-center"
         >
           <Ionicons name="bag-handle" size={18} color="white" />
           <Text className="text-white font-bold ml-2">

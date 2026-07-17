@@ -71,15 +71,15 @@ export default function HomeScreen() {
   });
 
   return (
-    <SafeAreaView className="flex-1 bg-light">
+    <SafeAreaView className="flex-1 bg-white">
       <View className="px-4 pt-4 pb-2">
-        <Text className="text-muted text-sm">Deliver to</Text>
+        <Text className="text-neutral-500 text-sm">Deliver to</Text>
         <View className="flex-row items-center mt-1">
-          <Ionicons name="location" size={18} color="#FF6B35" />
+          <Ionicons name="location" size={18} color="#5E9F2D" />
           <Text className="text-dark font-bold text-lg ml-1">Home · Maharagama</Text>
         </View>
         <View className="flex-row items-center bg-white rounded-xl px-3 py-2.5 mt-4">
-          <Ionicons name="search" size={18} color="#8A8A8A" />
+          <Ionicons name="search" size={18} color="#5E9F2D" />
           <TextInput
             placeholder="Search restaurants or cuisines"
             value={query}
