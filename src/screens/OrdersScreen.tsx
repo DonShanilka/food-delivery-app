@@ -7,14 +7,41 @@ import { useAuth } from "@/context/AuthContext";
 import { apiGet } from "@/services/api";
 import { Order, OrderStatus } from "@/types";
 
-const statusConfig: Record<OrderStatus, { label: string; color: string; icon: string }> = {
+const statusConfig: Record<
+  OrderStatus,
+  { label: string; color: string; icon: string }
+> = {
   PENDING: { label: "Pending", color: "#FFB703", icon: "time-outline" },
-  CONFIRMED: { label: "Confirmed", color: "#2196F3", icon: "checkmark-done-outline" },
-  PREPARING: { label: "Preparing", color: "#5E9F2D", icon: "restaurant-outline" },
-  READY_FOR_PICKUP: { label: "Ready", color: "#4CAF50", icon: "bicycle-outline" },
-  OUT_FOR_DELIVERY: { label: "On the way", color: "#2EC4B6", icon: "bicycle-outline" },
-  DELIVERED: { label: "Delivered", color: "#4CAF50", icon: "checkmark-circle-outline" },
-  CANCELLED: { label: "Cancelled", color: "#E53935", icon: "close-circle-outline" },
+  CONFIRMED: {
+    label: "Confirmed",
+    color: "#2196F3",
+    icon: "checkmark-done-outline",
+  },
+  PREPARING: {
+    label: "Preparing",
+    color: "#5E9F2D",
+    icon: "restaurant-outline",
+  },
+  READY_FOR_PICKUP: {
+    label: "Ready",
+    color: "#4CAF50",
+    icon: "bicycle-outline",
+  },
+  OUT_FOR_DELIVERY: {
+    label: "On the way",
+    color: "#2EC4B6",
+    icon: "bicycle-outline",
+  },
+  DELIVERED: {
+    label: "Delivered",
+    color: "#4CAF50",
+    icon: "checkmark-circle-outline",
+  },
+  CANCELLED: {
+    label: "Cancelled",
+    color: "#E53935",
+    icon: "close-circle-outline",
+  },
 };
 
 export default function OrdersScreen() {
@@ -30,8 +57,12 @@ export default function OrdersScreen() {
       setLoading(true);
       setError(null);
       try {
-        const response = await apiGet<Order[]>(`/orders?userId=${user._id}`);
-        loadOrders(response);
+        const response = await apiGet<{
+          success: boolean;
+          count?: number;
+          data: Order[];
+        }>(`/order/getAll?userId=${user._id}`);
+        loadOrders(response.data || []);
       } catch (err: any) {
         setError(err.message || "Unable to load orders.");
       } finally {
@@ -90,17 +121,25 @@ export default function OrdersScreen() {
               <View className="flex-row justify-between items-start">
                 <View className="flex-1 pr-2">
                   <Text className="text-dark font-semibold text-base">
-                    {order.restaurantName || order.restaurantId || "Order"}
+                    {order.restaurantName ||
+                      (typeof order.restaurantId === "string"
+                        ? order.restaurantId
+                        : order.restaurantId?.name) ||
+                      "Order"}
                   </Text>
                   <Text className="text-muted text-sm mt-1">
-                    {order.items.length} item(s) · ${order.totalPrice.toFixed(2)}
+                    {order.items.length} item(s) · $
+                    {order.totalPrice.toFixed(2)}
                   </Text>
                 </View>
                 <View
                   className="rounded-full px-3 py-1"
                   style={{ backgroundColor: `${status.color}22` }}
                 >
-                  <Text className="text-[11px] font-semibold" style={{ color: status.color }}>
+                  <Text
+                    className="text-[11px] font-semibold"
+                    style={{ color: status.color }}
+                  >
                     {status.label}
                   </Text>
                 </View>
@@ -109,7 +148,11 @@ export default function OrdersScreen() {
                 <Text className="text-muted text-xs">
                   {new Date(order.createdAt).toLocaleDateString()}
                 </Text>
-                <Ionicons name={status.icon} size={18} color={status.color} />
+                <Ionicons
+                  name={status.icon as any}
+                  size={18}
+                  color={status.color}
+                />
               </View>
             </View>
           );

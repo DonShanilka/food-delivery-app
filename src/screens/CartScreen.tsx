@@ -1,5 +1,12 @@
 import React from "react";
-import { View, Text, FlatList, Image, TouchableOpacity, SafeAreaView } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  Image,
+  TouchableOpacity,
+  SafeAreaView,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -16,7 +23,9 @@ export default function CartScreen() {
     return (
       <SafeAreaView className="flex-1 bg-white items-center justify-center">
         <Ionicons name="bag-outline" size={64} color="#8A8A8A" />
-        <Text className="text-neutral-500 text-base mt-4">Your cart is empty</Text>
+        <Text className="text-neutral-500 text-base mt-4">
+          Your cart is empty
+        </Text>
       </SafeAreaView>
     );
   }
@@ -61,15 +70,25 @@ export default function CartScreen() {
                   className="p-2 rounded-full"
                   activeOpacity={0.8}
                 >
-                  <Ionicons name="remove-circle-outline" size={24} color="#5E9F2D" />
+                  <Ionicons
+                    name="remove-circle-outline"
+                    size={24}
+                    color="#5E9F2D"
+                  />
                 </TouchableOpacity>
-                <Text className="mx-3 text-dark font-semibold">{c.quantity}</Text>
+                <Text className="mx-3 text-dark font-semibold">
+                  {c.quantity}
+                </Text>
                 <TouchableOpacity
                   onPress={() => updateQuantity(c.item.id, 1)}
                   className="p-2 rounded-full"
                   activeOpacity={0.8}
                 >
-                  <Ionicons name="add-circle-outline" size={24} color="#5E9F2D" />
+                  <Ionicons
+                    name="add-circle-outline"
+                    size={24}
+                    color="#5E9F2D"
+                  />
                 </TouchableOpacity>
               </View>
               <Text className="text-xs text-muted uppercase tracking-[0.2em]">
