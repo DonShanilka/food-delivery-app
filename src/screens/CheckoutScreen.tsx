@@ -94,34 +94,34 @@ export default function CheckoutScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-[#F4F5F7]">
+    <SafeAreaView className="flex-1 bg-white">
       <ScrollView className="px-4 pt-5">
         <View className="flex-row justify-between items-end mb-5">
           <View>
             <Text className="text-neutral-500 text-sm">Checkout</Text>
             <Text className="text-black font-bold text-3xl">Your Basket</Text>
           </View>
-          <View className="bg-black px-4 py-2 rounded-full">
+          <View className="bg-[#84C441] px-4 py-2 rounded-full">
             <Text className="text-white text-sm">{cart.length} items</Text>
           </View>
         </View>
 
-        <View className="bg-white rounded-[32px] p-5 mb-4 shadow-sm border border-gray-200">
+        <View className="bg-white rounded-[32px] p-5 mb-4">
           <View className="flex-row justify-between items-center mb-4">
             <View>
-              <Text className="text-dark font-semibold text-base">Delivery Address</Text>
+              <Text className="text-black font-semibold text-base">Delivery Address</Text>
               <Text className="text-muted text-sm mt-1">Where should we deliver your order?</Text>
             </View>
             <Ionicons name="location-outline" size={24} color="#5E9F2D" />
           </View>
           <TextInput
-            className="border border-gray-200 rounded-3xl px-4 py-4 text-base text-gray-900 bg-gray-50"
+            className="rounded-3xl px-4 py-4 text-base text-gray-900 bg-slate-50"
             placeholder="Enter delivery address"
             placeholderTextColor="#9ca3af"
             value={address}
             onChangeText={setAddress}
           />
-          <View className="flex-row items-center mt-4 px-3 py-3 rounded-3xl bg-gray-50">
+          <View className="flex-row items-center mt-4 px-3 py-3 rounded-3xl bg-slate-50">
             <Ionicons name="map-outline" size={18} color="#5E9F2D" />
             <Text className="text-muted ml-3 text-sm">
               {address ? "Delivery location added" : "Add delivery address to view route"}
@@ -129,10 +129,10 @@ export default function CheckoutScreen() {
           </View>
         </View>
 
-        <View className="bg-white rounded-[32px] p-5 mb-4 shadow-sm border border-gray-200">
+        <View className="bg-white/95 rounded-[32px] p-5 mb-4">
           <View className="flex-row justify-between items-center mb-4">
             <View>
-              <Text className="text-dark font-semibold text-base">Order Items</Text>
+              <Text className="text-black font-semibold text-base">Order Items</Text>
               <Text className="text-muted text-sm mt-1">Swipe or tap to edit quantities</Text>
             </View>
             <Ionicons name="basket-outline" size={24} color="#FF6B35" />
@@ -164,7 +164,7 @@ export default function CheckoutScreen() {
           ))}
         </View>
 
-        <View className="bg-white rounded-[32px] p-5 mb-4 shadow-sm border border-gray-200">
+        <View className="bg-white rounded-[32px] p-5 mb-4">
           <Text className="text-dark font-semibold text-base mb-4">Payment Method</Text>
           <View className="flex-row justify-between gap-2">
             {paymentMethods.map((method) => {
@@ -174,8 +174,8 @@ export default function CheckoutScreen() {
                   key={method}
                   onPress={() => setPayment(method)}
                   activeOpacity={0.85}
-                  className={`flex-1 rounded-3xl px-4 py-3 border ${
-                    active ? "border-black bg-black" : "border-gray-200 bg-gray-50"
+                  className={`flex-1 rounded-3xl px-4 py-3 ${
+                    active ? "bg-black" : "bg-slate-50"
                   }`}
                 >
                   <Text className={`text-center font-semibold ${active ? "text-white" : "text-dark"}`}>
@@ -190,7 +190,7 @@ export default function CheckoutScreen() {
           </Text>
         </View>
 
-        <View className="bg-white rounded-[32px] p-5 mb-28 shadow-sm border border-gray-200">
+        <View className="bg-white rounded-[32px] p-5 mb-28">
           <View className="flex-row justify-between mb-3">
             <Text className="text-muted">Subtotal</Text>
             <Text className="text-dark font-semibold">${cartTotal.toFixed(2)}</Text>
