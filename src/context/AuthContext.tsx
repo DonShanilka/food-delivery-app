@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { User } from "@/types";
+import { apiGet } from "@/services/api";
 
 interface AuthContextValue {
   user: User | null;
@@ -24,9 +25,27 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const loadUser = async () => {
       try {
-        const stored = await AsyncStorage.getItem("user");
+        const [stored, token] = await Promise.all([
+          AsyncStorage.getItem("user"),
+          AsyncStorage.getItem("token"),
+        ]);
+
         if (stored) {
           setUserState(JSON.parse(stored) as User);
+          return;
+        }
+
+        // If we have a token but no stored user, try fetching profile
+        if (token) {
+          try {
+            const resp = await apiGet<{ success?: boolean; data: User }>(
+              "/users/profile",
+            );
+            const profile = (resp as any)?.data ?? resp;
+            if (profile) setUserState(profile as User);
+          } catch {
+            // ignore - leave user null
+          }
         }
       } catch {
         // ignore
@@ -48,6 +67,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const logout = async () => {
+    await AsyncStorage.removeItem("token");
     await setUser(null);
   };
 

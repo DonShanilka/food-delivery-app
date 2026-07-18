@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   SafeAreaView,
   View,
@@ -11,6 +11,7 @@ import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "@/types";
 import { apiPost } from "@/services/api";
 import { useAuth } from "@/context/AuthContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function LoginScreen() {
   const navigation =
@@ -32,6 +33,11 @@ export default function LoginScreen() {
       );
       console.log("Login success", result);
       if (result?.data) {
+        // persist optional token returned by backend
+        const token = (result as any)?.token || (result.data as any)?.token;
+        if (token) {
+          await AsyncStorage.setItem("token", token);
+        }
         await setUser(result.data);
       }
       navigation.navigate("MainTabs", { screen: "Home" });
@@ -41,6 +47,8 @@ export default function LoginScreen() {
       setLoading(false);
     }
   };
+
+  
 
   return (
     <SafeAreaView className="flex-1 bg-white px-6 pt-12">
@@ -92,6 +100,8 @@ export default function LoginScreen() {
               {loading ? "Logging in..." : "Login"}
             </Text>
           </TouchableOpacity>
+
+          
 
           <View className="flex-row justify-center">
             <Text className="text-gray-500">Don't have an account? </Text>

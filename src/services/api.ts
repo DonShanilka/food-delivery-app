@@ -1,4 +1,5 @@
 import Constants from "expo-constants";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const localHost =
   Constants.manifest?.debuggerHost?.split(":").shift() ||
@@ -121,7 +122,12 @@ async function parseResponse<T>(response: Response): Promise<T> {
 }
 
 export async function apiGet<T>(path: string): Promise<T> {
-  const response = await fetch(`${BASE_URL}${path}`);
+  const token = await AsyncStorage.getItem("token");
+  const headers: Record<string, string> = token
+    ? { Authorization: `Bearer ${token}` }
+    : {};
+
+  const response = await fetch(`${BASE_URL}${path}`, { headers });
   const json = await parseResponse<T>(response);
 
   if (!response.ok) {
@@ -132,11 +138,15 @@ export async function apiGet<T>(path: string): Promise<T> {
 }
 
 export async function apiPost<T>(path: string, body: any): Promise<T> {
+  const token = await AsyncStorage.getItem("token");
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  };
+
   const response = await fetch(`${BASE_URL}${path}`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers,
     body: JSON.stringify(body),
   });
 
@@ -150,11 +160,15 @@ export async function apiPost<T>(path: string, body: any): Promise<T> {
 }
 
 export async function apiPut<T>(path: string, body: any): Promise<T> {
+  const token = await AsyncStorage.getItem("token");
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  };
+
   const response = await fetch(`${BASE_URL}${path}`, {
     method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers,
     body: JSON.stringify(body),
   });
 
