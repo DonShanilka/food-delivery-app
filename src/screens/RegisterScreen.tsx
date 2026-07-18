@@ -105,9 +105,7 @@ export default function RegisterScreen() {
           <View className="flex-row justify-center">
             <Text className="text-gray-500">Already have an account? </Text>
             <TouchableOpacity
-              onPress={() =>
-                navigation.navigate("Auth", { screen: "Login" } as any)
-              }
+              onPress={() => navigation.navigate("Login")}
             >
               <Text className="text-[#5E9F2D] font-bold">Login</Text>
             </TouchableOpacity>

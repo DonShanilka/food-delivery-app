@@ -45,7 +45,7 @@ export default function SplashScreen() {
         <TouchableOpacity
           className="w-full px-8 absolute bottom-12"
           activeOpacity={0.8}
-          onPress={() => navigation.navigate("Auth")}
+          onPress={() => navigation.navigate("Login")}
         >
           <LinearGradient
             colors={["#84C441", "#5E9F2D"]}
