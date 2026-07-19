@@ -75,11 +75,11 @@ export default function HomeScreen() {
       <View className="px-4 pt-4 pb-2">
         <Text className="text-neutral-500 text-sm">Deliver to</Text>
         <View className="flex-row items-center mt-1">
-          <Ionicons name="location" size={18} color="#5E9F2D" />
+          <Ionicons name="location" size={18} color="#22C55E" />
           <Text className="text-dark font-bold text-lg ml-1">Home · Maharagama</Text>
         </View>
         <View className="flex-row items-center bg-white rounded-xl px-3 py-2.5 mt-4">
-          <Ionicons name="search" size={18} color="#5E9F2D" />
+          <Ionicons name="search" size={18} color="#22C55E" />
           <TextInput
             placeholder="Search restaurants or cuisines"
             value={query}
@@ -92,7 +92,7 @@ export default function HomeScreen() {
 
       {loading ? (
         <View className="flex-1 justify-center items-center">
-          <ActivityIndicator size="large" color="#84C441" />
+          <ActivityIndicator size="large" color="#22C55E" />
         </View>
       ) : error ? (
         <View className="flex-1 justify-center items-center px-8">

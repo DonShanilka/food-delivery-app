@@ -48,7 +48,7 @@ export default function CartScreen() {
                 <Text className="text-dark font-semibold text-base">
                   {c.item.name}
                 </Text>
-                <Text className="text-primary font-bold mt-1 text-sm">
+                <Text className="text-green-500 font-bold mt-1 text-sm">
                   ${(c.item.price * c.quantity).toFixed(2)}
                 </Text>
                 <Text className="text-muted text-xs mt-1">
@@ -60,7 +60,7 @@ export default function CartScreen() {
                 className="p-2 rounded-full"
                 activeOpacity={0.8}
               >
-                <Ionicons name="trash-outline" size={22} color="#5E9F2D" />
+                <Ionicons name="trash-outline" size={22} color="red" />
               </TouchableOpacity>
             </View>
             <View className="flex-row items-center justify-between mt-4 bg-slate-50 rounded-full px-2 py-2">
@@ -73,7 +73,7 @@ export default function CartScreen() {
                   <Ionicons
                     name="remove-circle-outline"
                     size={24}
-                    color="#5E9F2D"
+                    color="#22C55E"
                   />
                 </TouchableOpacity>
                 <Text className="mx-3 text-dark font-semibold">
@@ -87,7 +87,7 @@ export default function CartScreen() {
                   <Ionicons
                     name="add-circle-outline"
                     size={24}
-                    color="#5E9F2D"
+                    color="#22C55E"
                   />
                 </TouchableOpacity>
               </View>
@@ -114,7 +114,7 @@ export default function CartScreen() {
         <TouchableOpacity
           onPress={() => navigation.navigate("Checkout")}
           activeOpacity={0.85}
-          className="bg-primary rounded-3xl py-4 items-center"
+          className="bg-green-500 rounded-3xl py-4 items-center"
         >
           <Text className="text-white font-bold text-base">
             Proceed to Checkout

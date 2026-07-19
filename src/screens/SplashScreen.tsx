@@ -48,13 +48,13 @@ export default function SplashScreen() {
           onPress={() => navigation.navigate("Login")}
         >
           <LinearGradient
-            colors={["#84C441", "#5E9F2D"]}
+            colors={["#84C441", "#22C55E"]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             className="rounded-full py-4 flex-row items-center justify-center"
           >
             <View className="bg-white rounded-full w-10 h-10 justify-center items-center mr-4">
-              <Ionicons name="arrow-forward" size={20} color="#6BA539" />
+              <Ionicons name="arrow-forward" size={20} color="#22C55E" />
             </View>
 
             <Text className="text-white text-lg font-bold">Get Started</Text>

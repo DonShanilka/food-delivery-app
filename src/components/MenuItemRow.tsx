@@ -1,10 +1,5 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { MenuItem } from "@/types";
 
@@ -13,18 +8,17 @@ interface Props {
   onAdd: () => void;
 }
 
-const PLACEHOLDER =
-  "https://via.placeholder.com/160x160.png?text=Menu";
+const PLACEHOLDER = "https://via.placeholder.com/160x160.png?text=Menu";
 
 export default function MenuItemRow({ item, onAdd }: Props) {
   const [failed, setFailed] = useState(false);
 
   const imageUri =
-  item.image && item.image.length > 0
-    ? item.image.startsWith("data:image")
-      ? item.image
-      : `data:image/png;base64,${item.image}`
-    : PLACEHOLDER;
+    item.image && item.image.length > 0
+      ? item.image.startsWith("data:image")
+        ? item.image
+        : `data:image/png;base64,${item.image}`
+      : PLACEHOLDER;
 
   return (
     <View className="flex-row bg-white rounded-2xl p-3 mb-3 items-center shadow-sm">
@@ -46,23 +40,20 @@ export default function MenuItemRow({ item, onAdd }: Props) {
 
           {item.discount > 0 && (
             <View className="bg-green-100 px-2 py-1 rounded-full">
-              <Text className="text-green-700 text-[11px] font-semibold">
+              <Text className="text-green-500 text-[11px] font-semibold">
                 -{item.discount}%
               </Text>
             </View>
           )}
         </View>
 
-        <Text
-          numberOfLines={2}
-          className="text-gray-500 text-xs mt-1"
-        >
+        <Text numberOfLines={2} className="text-gray-500 text-xs mt-1">
           {item.description}
         </Text>
 
         <View className="flex-row justify-between items-center mt-3">
           <View>
-            <Text className="text-orange-500 font-bold text-lg">
+            <Text className="text-green-500 font-bold text-lg">
               Rs. {Number(item.price).toFixed(2)}
             </Text>
 
@@ -73,13 +64,9 @@ export default function MenuItemRow({ item, onAdd }: Props) {
 
           <TouchableOpacity
             onPress={onAdd}
-            className="bg-orange-500 w-10 h-10 rounded-full justify-center items-center"
+            className="bg-green-500 w-10 h-10 rounded-full justify-center items-center"
           >
-            <Ionicons
-              name="add"
-              size={22}
-              color="white"
-            />
+            <Ionicons name="add" size={22} color="white" />
           </TouchableOpacity>
         </View>
       </View>

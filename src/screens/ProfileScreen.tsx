@@ -140,7 +140,7 @@ export default function ProfileScreen() {
           <View className="flex-row items-center justify-between">
             <Text className="text-dark font-semibold text-lg">Profile Details</Text>
             {editing ? (
-              <Text className="text-sm text-[#5E9F2D]">Editing</Text>
+              <Text className="text-sm text-green-500">Editing</Text>
             ) : null}
           </View>
 
@@ -220,12 +220,12 @@ export default function ProfileScreen() {
           </View>
 
           {message ? (
-            <Text className="text-center text-sm text-[#5E9F2D]">{message}</Text>
+            <Text className="text-center text-sm text-green-500">{message}</Text>
           ) : null}
 
           {editing ? (
             <TouchableOpacity
-              className="bg-[#5E9F2D] rounded-2xl py-4 items-center"
+              className="bg-green-500 rounded-2xl py-4 items-center"
               onPress={handleSave}
               disabled={loading}
             >
@@ -241,7 +241,7 @@ export default function ProfileScreen() {
             className="bg-slate-50 rounded-2xl py-4 items-center"
             onPress={handleLogout}
           >
-            <Text className="text-[#5E9F2D] font-bold">Logout</Text>
+            <Text className="text-red-500 font-bold">Logout</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

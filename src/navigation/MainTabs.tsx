@@ -17,7 +17,7 @@ function CartIconWithBadge({ color, size }: { color: string; size: number }) {
     <View>
       <Ionicons name="bag-handle-outline" size={size} color={color} />
       {cartCount > 0 && (
-        <View className="absolute -top-1 -right-2 bg-[#5E9F2D] rounded-full w-4 h-4 items-center justify-center">
+        <View className="absolute -top-1 -right-2 bg-green-500 rounded-full w-4 h-4 items-center justify-center">
           <Text className="text-white text-[10px] font-bold">{cartCount}</Text>
         </View>
       )}
@@ -30,7 +30,7 @@ export default function MainTabs() {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: "#5E9F2D",
+        tabBarActiveTintColor: "#22C55E",
         tabBarInactiveTintColor: "#8A8A8A",
       }}
     >

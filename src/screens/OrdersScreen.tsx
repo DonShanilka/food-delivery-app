@@ -96,7 +96,7 @@ export default function OrdersScreen() {
   if (orders.length === 0) {
     return (
       <SafeAreaView className="flex-1 bg-white items-center justify-center px-6">
-        <Ionicons name="receipt-outline" size={64} color="#5E9F2D" />
+        <Ionicons name="receipt-outline" size={64} color="#22C55E" />
         <Text className="text-neutral-500 text-base mt-4">No orders yet</Text>
         {error ? (
           <Text className="text-red-500 text-sm mt-2">{error}</Text>

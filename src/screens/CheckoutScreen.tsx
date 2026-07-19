@@ -108,7 +108,7 @@ export default function CheckoutScreen() {
             <Text className="text-neutral-500 text-sm">Checkout</Text>
             <Text className="text-black font-bold text-3xl">Your Basket</Text>
           </View>
-          <View className="bg-[#5E9F2D] px-4 py-2 rounded-full">
+          <View className="bg-green-500 px-4 py-2 rounded-full">
             <Text className="text-white text-sm">{cart.length} items</Text>
           </View>
         </View>
@@ -123,7 +123,7 @@ export default function CheckoutScreen() {
                 Where should we deliver your order?
               </Text>
             </View>
-            <Ionicons name="location-outline" size={24} color="#5E9F2D" />
+            <Ionicons name="location-outline" size={24} color="#22C55E" />
           </View>
           <TextInput
             className="rounded-3xl px-4 py-4 text-base text-gray-900 bg-slate-50"
@@ -133,7 +133,7 @@ export default function CheckoutScreen() {
             onChangeText={setAddress}
           />
           <View className="flex-row items-center mt-4 px-3 py-3 rounded-3xl bg-slate-50">
-            <Ionicons name="map-outline" size={18} color="#5E9F2D" />
+            <Ionicons name="map-outline" size={18} color="#22C55E" />
             <Text className="text-muted ml-3 text-sm">
               {address
                 ? "Delivery location added"
@@ -152,7 +152,7 @@ export default function CheckoutScreen() {
                 Swipe or tap to edit quantities
               </Text>
             </View>
-            <Ionicons name="basket-outline" size={24} color="#5E9F2D" />
+            <Ionicons name="basket-outline" size={24} color="#22C55E" />
           </View>
           {cart.map((c) => (
             <View
@@ -174,7 +174,7 @@ export default function CheckoutScreen() {
                   <Ionicons
                     name="remove-circle-outline"
                     size={22}
-                    color="#5E9F2D"
+                    color="#22C55E"
                   />
                 </TouchableOpacity>
                 <Text className="px-4 text-dark font-semibold">
@@ -188,7 +188,7 @@ export default function CheckoutScreen() {
                   <Ionicons
                     name="add-circle-outline"
                     size={22}
-                    color="#5E9F2D"
+                    color="#22C55E"
                   />
                 </TouchableOpacity>
               </View>
@@ -262,7 +262,7 @@ export default function CheckoutScreen() {
           disabled={loading}
           activeOpacity={0.85}
           className={`rounded-[30px] py-4 items-center ${
-            loading ? "bg-gray-400" : "bg-black"
+            loading ? "bg-gray-400" : "bg-green-500"
           }`}
         >
           <Text className="text-white font-bold text-base">
@@ -286,7 +286,7 @@ export default function CheckoutScreen() {
             <TouchableOpacity
               onPress={handleSuccessClose}
               activeOpacity={0.85}
-              className="bg-black rounded-3xl py-4 items-center"
+              className="bg-green-500 rounded-3xl py-4 items-center"
             >
               <Text className="text-white font-semibold">View Orders</Text>
             </TouchableOpacity>

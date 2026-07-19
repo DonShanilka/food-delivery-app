@@ -29,11 +29,9 @@ export default function LoginScreen() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const [showPassword, setShowPassword] = useState(false);
 
   const [remember, setRemember] = useState(false);
-
   const [loading, setLoading] = useState(false);
 
   const [error, setError] = useState("");
@@ -129,17 +127,16 @@ export default function LoginScreen() {
           >
             <View
               className={`w-5 h-5 rounded border mr-2 justify-center items-center ${
-                remember ? "bg-[#84C441] border-[#84C441]" : "border-gray-300"
+                remember ? "bg-green-500 border-green-500" : "border-gray-300"
               }`}
             >
               {remember && <Feather name="check" size={14} color="white" />}
             </View>
-
             <Text className="text-gray-500">Remember me</Text>
           </TouchableOpacity>
 
           <TouchableOpacity>
-            <Text className="text-[#84C441] font-semibold">
+            <Text className="text-green-500 font-semibold">
               Forgot Password?
             </Text>
           </TouchableOpacity>
@@ -149,7 +146,7 @@ export default function LoginScreen() {
 
         {/* Login Button */}
         <TouchableOpacity
-          className="bg-[#84C441] rounded-xl h-14 justify-center items-center"
+          className="bg-green-500 rounded-xl h-14 justify-center items-center"
           onPress={handleLogin}
         >
           <Text className="text-white text-lg font-bold">
@@ -168,13 +165,11 @@ export default function LoginScreen() {
         <View className="flex-row justify-between">
           <TouchableOpacity className="border border-gray-200 rounded-xl h-14 flex-1 mr-2 justify-center items-center flex-row">
             <AntDesign name="google" size={20} color="#DB4437" />
-
             <Text className="ml-2 font-semibold">Google</Text>
           </TouchableOpacity>
 
           <TouchableOpacity className="border border-gray-200 rounded-xl h-14 flex-1 ml-2 justify-center items-center flex-row">
             <FontAwesome name="facebook" size={20} color="#1877F2" />
-
             <Text className="ml-2 font-semibold">Facebook</Text>
           </TouchableOpacity>
         </View>
@@ -182,9 +177,8 @@ export default function LoginScreen() {
         {/* Bottom */}
         <View className="flex-row justify-center mt-10">
           <Text className="text-gray-500">Don't have an account?</Text>
-
           <TouchableOpacity onPress={() => navigation.navigate("Register")}>
-            <Text className="text-[#84C441] font-bold ml-2 mb-2">Sign Up</Text>
+            <Text className="text-green-500 font-bold ml-2 mb-2">Sign Up</Text>
           </TouchableOpacity>
         </View>
       </View>
