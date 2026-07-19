@@ -5,33 +5,65 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  Image,
+  ScrollView,
 } from "react-native";
+// import { Feather, FontAwesome5 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import {
+  Feather,
+  AntDesign,
+  FontAwesome,
+  FontAwesome5,
+} from "@expo/vector-icons";
 import { RootStackParamList } from "@/types";
 import { apiPost } from "@/services/api";
 
 export default function RegisterScreen() {
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleRegister = async () => {
     setError(null);
-    setLoading(true);
+
+    if (
+      !name.trim() ||
+      !email.trim() ||
+      !password.trim() ||
+      !confirmPassword.trim()
+    ) {
+      setError("Please fill all fields.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
 
     try {
-      const result = await apiPost("/users/register", {
+      setLoading(true);
+
+      await apiPost("/users/register", {
         first_name: name,
         last_name: "",
         email,
         password,
         phone: "",
       });
-      console.log("Register success", result);
+
       navigation.navigate("Login");
     } catch (err: any) {
       setError(err.message);
@@ -41,77 +73,140 @@ export default function RegisterScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white px-6 pt-12">
-        <View className="mb-10">
-          <Text className="text-4xl font-extrabold text-white">
-            Create Account
-          </Text>
-          <Text className="text-white text-base mt-2">
-            Join Solena and order healthy meals in minutes.
+    <SafeAreaView className="flex-1 bg-white">
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 40 }}
+      >
+        {/* Illustration */}
+        <View className="items-center mt-4">
+          <Image
+            source={require("@/assets/images/register.png")}
+            className="w-64 h-52"
+            resizeMode="contain"
+          />
+        </View>
+
+        {/* Title */}
+        <View className="px-7">
+          <Text className="text-3xl font-bold text-gray-800">Sign up</Text>
+
+          <Text className="text-gray-400 mt-2">
+            Create your account to continue.
           </Text>
         </View>
 
-        <View className="bg-slate-50 rounded-[30px] p-6">
-          <Text className="text-gray-700 text-sm font-semibold mb-2">
-            Full name
-          </Text>
-          <TextInput
-            className="border border-gray-200 rounded-2xl px-4 py-3 mb-4 text-base text-gray-900"
-            placeholder="Enter your full name"
-            placeholderTextColor="#9ca3af"
-            value={name}
-            onChangeText={setName}
-          />
+        {/* Form */}
+        <View className="px-7 mt-4">
+          {/* Name */}
+          <View className="border border-gray-200 rounded-xl flex-row items-center px-4 h-14 mb-4">
+            <FontAwesome5 name="user-alt" size={16} color="#9CA3AF" />
+            <TextInput
+              placeholder="Full Name"
+              className="flex-1 ml-3 text-gray-700"
+              placeholderTextColor="#9CA3AF"
+              value={name}
+              onChangeText={setName}
+            />
+          </View>
 
-          <Text className="text-gray-700 text-sm font-semibold mb-2">
-            Email
-          </Text>
-          <TextInput
-            className="border border-gray-200 rounded-2xl px-4 py-3 mb-4 text-base text-gray-900"
-            placeholder="Enter your email"
-            placeholderTextColor="#9ca3af"
-            keyboardType="email-address"
-            autoCapitalize="none"
-            value={email}
-            onChangeText={setEmail}
-          />
+          {/* Email */}
+          <View className="border border-gray-200 rounded-xl flex-row items-center px-4 h-14 mb-4">
+            <Feather name="mail" size={18} color="#9CA3AF" />
+            <TextInput
+              placeholder="Email"
+              className="flex-1 ml-3 text-gray-700"
+              placeholderTextColor="#9CA3AF"
+              autoCapitalize="none"
+              keyboardType="email-address"
+              value={email}
+              onChangeText={setEmail}
+            />
+          </View>
 
-          <Text className="text-gray-700 text-sm font-semibold mb-2">
-            Password
-          </Text>
-          <TextInput
-            className="border border-gray-200 rounded-2xl px-4 py-3 mb-6 text-base text-gray-900"
-            placeholder="Create a password"
-            placeholderTextColor="#9ca3af"
-            secureTextEntry
-            value={password}
-            onChangeText={setPassword}
-          />
+          {/* Password */}
+          <View className="border border-gray-200 rounded-xl flex-row items-center px-4 h-14 mb-4">
+            <Feather name="lock" size={18} color="#9CA3AF" />
+            <TextInput
+              placeholder="Password"
+              secureTextEntry={!showPassword}
+              className="flex-1 ml-3 text-gray-700"
+              placeholderTextColor="#9CA3AF"
+              value={password}
+              onChangeText={setPassword}
+            />
 
-          {error ? (
-            <Text className="text-red-500 text-sm mb-4">{error}</Text>
-          ) : null}
+            <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+              <Feather
+                name={showPassword ? "eye" : "eye-off"}
+                size={20}
+                color="#9CA3AF"
+              />
+            </TouchableOpacity>
+          </View>
 
+          {/* Confirm Password */}
+          <View className="border border-gray-200 rounded-xl flex-row items-center px-4 h-14">
+            <Feather name="lock" size={18} color="#9CA3AF" />
+            <TextInput
+              placeholder="Confirm Password"
+              secureTextEntry={!showConfirm}
+              className="flex-1 ml-3 text-gray-700"
+              placeholderTextColor="#9CA3AF"
+              value={confirmPassword}
+              onChangeText={setConfirmPassword}
+            />
+            <TouchableOpacity onPress={() => setShowConfirm(!showConfirm)}>
+              <Feather
+                name={showConfirm ? "eye" : "eye-off"}
+                size={20}
+                color="#9CA3AF"
+              />
+            </TouchableOpacity>
+          </View>
+
+          {error && <Text className="text-red-500 mt-4">{error}</Text>}
+
+          {/* Register Button */}
           <TouchableOpacity
-            className="bg-[#84C441] rounded-full py-4 items-center mb-4"
-            activeOpacity={0.8}
             onPress={handleRegister}
+            activeOpacity={0.9}
+            className="bg-green-500 rounded-xl h-14 items-center justify-center mt-7"
           >
             <Text className="text-white text-lg font-bold">
-              {loading ? "Registering..." : "Register"}
+              {loading ? "Signing Up..." : "Sign Up"}
             </Text>
           </TouchableOpacity>
 
-          <View className="flex-row justify-center">
-            <Text className="text-gray-500">Already have an account? </Text>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("Login")}
-            >
-              <Text className="text-[#5E9F2D] font-bold">Login</Text>
+          {/* Divider */}
+          <View className="flex-row items-center my-6">
+            <View className="flex-1 h-[1px] bg-gray-200" />
+            <Text className="mx-3 text-gray-400">Or sign up with</Text>
+            <View className="flex-1 h-[1px] bg-gray-200" />
+          </View>
+
+          {/* Social Buttons */}
+          <View className="flex-row justify-between">
+            <TouchableOpacity className="border border-gray-200 rounded-xl h-14 flex-1 mr-2 justify-center items-center flex-row">
+              <AntDesign name="google" size={20} color="#DB4437" />
+              <Text className="ml-2 font-semibold">Google</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity className="border border-gray-200 rounded-xl h-14 flex-1 ml-2 justify-center items-center flex-row">
+              <FontAwesome name="facebook" size={20} color="#1877F2" />
+              <Text className="ml-2 font-semibold">Facebook</Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* Login */}
+          <View className="flex-row justify-center mt-6">
+            <Text className="text-gray-500">Already have an account?</Text>
+            <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+              <Text className="text-green-500 font-bold ml-2">Log In</Text>
             </TouchableOpacity>
           </View>
         </View>
-      </SafeAreaView>
-    // </LinearGradient>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
