@@ -52,28 +52,30 @@ export default function OrdersScreen() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchOrders = async () => {
-      if (!user) return;
+    const fetchPendingOrders = async () => {
+      if (!user?._id) return;
+
       setLoading(true);
       setError(null);
+
       try {
         const response = await apiGet<{
           success: boolean;
-          count?: number;
           data: Order[];
-        }>(`/order/getAll?userId=${user._id}`);
-        loadOrders(response.data || []);
+        }>(`/order/pending/${user._id}`);
+
+        loadOrders(response.data ?? []);
       } catch (err: any) {
-        setError(err.message || "Unable to load orders.");
+        setError(err.message || "Unable to load pending orders.");
       } finally {
         setLoading(false);
       }
     };
 
-    if (isFocused && user) {
-      fetchOrders();
+    if (isFocused) {
+      fetchPendingOrders();
     }
-  }, [user, loadOrders, isFocused]);
+  }, [user, isFocused]);
 
   if (loading) {
     return (
