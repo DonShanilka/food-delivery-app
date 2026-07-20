@@ -123,11 +123,7 @@ export default function OrdersScreen() {
               <View className="flex-row justify-between items-start">
                 <View className="flex-1 pr-2">
                   <Text className="text-dark font-semibold text-base">
-                    {order.restaurantName ||
-                      (typeof order.restaurantId === "string"
-                        ? order.restaurantId
-                        : order.restaurantId?.name) ||
-                      "Order"}
+                    {order.items[0].name}
                   </Text>
                   <Text className="text-muted text-sm mt-1">
                     {order.items.length} item(s) · $
