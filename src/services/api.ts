@@ -35,15 +35,28 @@ export function normalizeImageValue(value: any): string | undefined {
   }
 
   if (typeof value === "string") {
-    if (value.startsWith("http") || value.startsWith("data:")) {
-      return value;
+    const imageValue = value.trim();
+
+    if (imageValue.startsWith("http") || imageValue.startsWith("data:")) {
+      return imageValue;
     }
 
-    return `data:image/jpeg;base64,${value}`;
+    const binaryMatch = imageValue.match(
+      /^Binary\.createFromBase64\(['"]([^'"]+)['"],\s*\d+\)$/,
+    );
+
+    return `data:image/jpeg;base64,${binaryMatch?.[1] || imageValue}`;
   }
 
   const contentType =
-    value.contentType || value.mimetype || value.type || "image/jpeg";
+    [value.contentType, value.mimetype, value.type].find(
+      (candidate) =>
+        typeof candidate === "string" && candidate.includes("/"),
+    ) || "image/jpeg";
+
+  if (typeof value.$binary?.base64 === "string") {
+    return `data:${contentType};base64,${value.$binary.base64}`;
+  }
 
   if (typeof value.data === "string") {
     return value.data.startsWith("data:")

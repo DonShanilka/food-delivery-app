@@ -6,6 +6,8 @@ import {
   TextInput,
   SafeAreaView,
   ActivityIndicator,
+  Pressable,
+  ScrollView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -16,6 +18,8 @@ import RestaurantCard from "@/components/RestaurantCard";
 import { apiGet, normalizeImageValue } from "@/services/api";
 import { Restaurant, MainTabParamList, RootStackParamList } from "@/types";
 
+const DEFAULT_RESTAURANT_IMAGE = require("@/assets/images/main-splashimage.png");
+
 type HomeScreenNavigationProp = CompositeNavigationProp<
   BottomTabNavigationProp<MainTabParamList, "Home">,
   NativeStackNavigationProp<RootStackParamList>
@@ -25,6 +29,7 @@ export default function HomeScreen() {
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const [query, setQuery] = useState("");
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState("All");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -42,9 +47,15 @@ export default function HomeScreen() {
           cuisine: Array.isArray(item.cuisine)
             ? item.cuisine.join(", ")
             : item.cuisine || item.category || "Restaurant",
+          category:
+            item.category ||
+            (Array.isArray(item.cuisine)
+              ? item.cuisine[0]
+              : item.cuisine?.split(" · ")[0]) ||
+            "Restaurant",
           image:
             normalizeImageValue(item.image) ||
-            "https://via.placeholder.com/640x400.png?text=Restaurant",
+            DEFAULT_RESTAURANT_IMAGE,
           rating: typeof item.rating === "number" ? item.rating : 4.5,
           deliveryTime: item.deliveryTime ?? "30-40 min",
           deliveryFee:
@@ -62,9 +73,21 @@ export default function HomeScreen() {
     loadRestaurants();
   }, []);
 
+  const categories = [
+    "All",
+    ...Array.from(
+      new Set(restaurants.map((restaurant) => restaurant.category || restaurant.cuisine.split(" · ")[0]))
+    ),
+  ];
+
   const filtered = restaurants.filter((r) => {
     const cuisine = r.cuisine;
-    return (
+    const matchesCategory =
+      selectedCategory === "All" ||
+      r.category === selectedCategory ||
+      cuisine.toLowerCase().includes(selectedCategory.toLowerCase());
+
+    return matchesCategory && (
       r.name.toLowerCase().includes(query.toLowerCase()) ||
       cuisine.toLowerCase().includes(query.toLowerCase())
     );
@@ -104,9 +127,46 @@ export default function HomeScreen() {
           keyExtractor={(item) => item.id}
           contentContainerStyle={{ padding: 16, paddingTop: 8 }}
           ListHeaderComponent={
-            <Text className="text-dark font-bold text-lg mb-3">
-              Restaurants near you
-            </Text>
+            <View>
+              <Text className="text-dark font-bold text-lg mb-3">
+                Explore categories
+              </Text>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{ paddingBottom: 20 }}
+              >
+                {categories.map((category) => {
+                  const isSelected = selectedCategory === category;
+
+                  return (
+                    <Pressable
+                      key={category}
+                      onPress={() => setSelectedCategory(category)}
+                      className={`mr-3 items-center justify-center rounded-2xl px-4 py-3 ${
+                        isSelected ? "bg-green-500" : "bg-neutral-100"
+                      }`}
+                    >
+                      <Ionicons
+                        name={category === "All" ? "grid-outline" : "restaurant-outline"}
+                        size={22}
+                        color={isSelected ? "#FFFFFF" : "#22C55E"}
+                      />
+                      <Text
+                        className={`mt-1 text-xs font-semibold ${
+                          isSelected ? "text-white" : "text-dark"
+                        }`}
+                      >
+                        {category}
+                      </Text>
+                    </Pressable>
+                  );
+                })}
+              </ScrollView>
+              <Text className="text-dark font-bold text-lg mb-3">
+                Restaurants near you
+              </Text>
+            </View>
           }
           renderItem={({ item }) => (
             <RestaurantCard

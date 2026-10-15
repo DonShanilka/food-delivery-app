@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Restaurant } from "@/types";
+import { normalizeImageValue } from "@/services/api";
 
 interface Props {
   restaurant: Restaurant;
   onPress: () => void;
 }
 
-const PLACEHOLDER = "https://via.placeholder.com/640x400.png?text=Restaurant";
+const PLACEHOLDER = require("@/assets/images/main-splashimage.png");
 
 export default function RestaurantCard({ restaurant, onPress }: Props) {
   const [failed, setFailed] = useState(false);
@@ -16,9 +17,7 @@ export default function RestaurantCard({ restaurant, onPress }: Props) {
     ? restaurant.cuisine.join(", ")
     : restaurant.cuisine || "Restaurant";
 
-  const uri = typeof restaurant.image === "string" && restaurant.image.length > 0
-    ? restaurant.image
-    : PLACEHOLDER;
+  const uri = normalizeImageValue(restaurant.image);
 
   return (
     <TouchableOpacity
@@ -26,7 +25,7 @@ export default function RestaurantCard({ restaurant, onPress }: Props) {
       className="bg-white rounded-2xl mb-4 overflow-hidden"
     >
       <Image
-        source={{ uri: failed ? PLACEHOLDER : uri }}
+        source={failed || !uri ? PLACEHOLDER : { uri }}
         onError={() => setFailed(true)}
         resizeMode="cover"
         className="w-full h-40"

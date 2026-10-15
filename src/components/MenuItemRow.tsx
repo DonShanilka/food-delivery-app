@@ -2,28 +2,24 @@ import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { MenuItem } from "@/types";
+import { normalizeImageValue } from "@/services/api";
 
 interface Props {
   item: MenuItem;
   onAdd: () => void;
 }
 
-const PLACEHOLDER = "https://via.placeholder.com/160x160.png?text=Menu";
+const PLACEHOLDER = require("@/assets/images/main-splashimage.png");
 
 export default function MenuItemRow({ item, onAdd }: Props) {
   const [failed, setFailed] = useState(false);
 
-  const imageUri =
-    item.image && item.image.length > 0
-      ? item.image.startsWith("data:image")
-        ? item.image
-        : `data:image/png;base64,${item.image}`
-      : PLACEHOLDER;
+  const imageUri = normalizeImageValue(item.image);
 
   return (
     <View className="flex-row bg-white rounded-2xl p-3 mb-3 items-center shadow-sm">
       <Image
-        source={{ uri: imageUri }}
+        source={failed || !imageUri ? PLACEHOLDER : { uri: imageUri }}
         className="w-20 h-20 rounded-xl"
         resizeMode="cover"
         onError={(e) => {

@@ -17,6 +17,8 @@ import { apiGet, normalizeImageValue } from "@/services/api";
 import { RootStackParamList, Restaurant, MenuItem } from "@/types";
 
 type RestaurantRoute = RouteProp<RootStackParamList, "Restaurant">;
+const DEFAULT_RESTAURANT_IMAGE = require("@/assets/images/main-splashimage.png");
+const DEFAULT_MENU_IMAGE = require("@/assets/images/main-splashimage.png");
 
 export default function RestaurantScreen() {
   const navigation =
@@ -29,6 +31,7 @@ export default function RestaurantScreen() {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [restaurantImageFailed, setRestaurantImageFailed] = useState(false);
 
   useEffect(() => {
     const fetchRestaurant = async () => {
@@ -51,7 +54,7 @@ export default function RestaurantScreen() {
               "Restaurant",
           image:
             normalizeImageValue(restaurantRes.data.image) ||
-            "https://via.placeholder.com/640x400.png?text=Restaurant",
+            DEFAULT_RESTAURANT_IMAGE,
           rating:
             typeof restaurantRes.data.rating === "number"
               ? restaurantRes.data.rating
@@ -81,7 +84,7 @@ export default function RestaurantScreen() {
             rating: typeof item.rating === "number" ? item.rating : 0,
             image:
               normalizeImageValue(item.image) ||
-              "https://via.placeholder.com/160x160.png?text=Menu",
+              DEFAULT_MENU_IMAGE,
             isAvailable: item.isAvailable ?? true,
             preparationTime:
               typeof item.preparationTime === "number"
@@ -122,10 +125,12 @@ export default function RestaurantScreen() {
     <SafeAreaView className="flex-1 bg-white">
       <View>
         <Image
-          source={{
-            uri: typeof restaurant.image === "string" ? restaurant.image : "",
-          }}
-          onError={() => {}}
+          source={
+            restaurantImageFailed
+              ? DEFAULT_RESTAURANT_IMAGE
+              : { uri: restaurant.image }
+          }
+          onError={() => setRestaurantImageFailed(true)}
           resizeMode="cover"
           className="w-full h-48"
         />

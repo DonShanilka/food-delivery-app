@@ -14,10 +14,9 @@ import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList, User } from "@/types";
 import { useAuth } from "@/context/AuthContext";
-import { apiPut } from "@/services/api";
+import { apiPut, normalizeImageValue } from "@/services/api";
 
-const DEFAULT_PROFILE_IMAGE =
-  "https://via.placeholder.com/160x160.png?text=Profile";
+const DEFAULT_PROFILE_IMAGE = require("@/assets/images/main-splashimage.png");
 
 export default function ProfileScreen() {
   const navigation =
@@ -34,6 +33,7 @@ export default function ProfileScreen() {
   const [editing, setEditing] = useState(false);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  const normalizedProfileImage = normalizeImageValue(profileImage);
 
   useEffect(() => {
     if (user) {
@@ -126,7 +126,11 @@ export default function ProfileScreen() {
 
         <View className="items-center mb-6">
           <Image
-            source={{ uri: profileImage || DEFAULT_PROFILE_IMAGE }}
+            source={
+              normalizedProfileImage
+                ? { uri: normalizedProfileImage }
+                : DEFAULT_PROFILE_IMAGE
+            }
             className="w-24 h-24 rounded-full bg-gray-200"
             resizeMode="cover"
           />
